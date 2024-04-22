@@ -4,10 +4,12 @@ import std/[posix]
 type AsyncFile* = ref object of AsyncIoBase
     ## An AsyncFile implementation close to C methods
     fd*: cint
+    osError*: cint
     pollable: bool
     unregistered: bool
     readListener: Listener
     writeListener: Listener
+    
 
 proc new*(T: type AsyncFile, fd: FileHandle): T
 proc unregister*(self: AsyncFile)
@@ -49,11 +51,20 @@ method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[void
     if await checkWithCancel(self.readSelect(), any(cancelFut, self.cancelled)):
         result = newString(count)
         let bytesCount = posix.read(self.fd, addr(result[0]), count)
-        result.setLen(bytesCount)
+        if bytesCount == -1:
+            self.osError = errno
+            result.setLen(0)
+        else:
+            result.setLen(bytesCount)
 
 method writeUnlocked(self: AsyncFile, data: string, cancelFut: Future[void]): Future[int]  {.async.} =
     if await checkWithCancel(self.writeSelect(), any(cancelFut, self.cancelled)):
-        return posix.write(self.fd, addr(data[0]), data.len())
+        let bytesCount = posix.write(self.fd, addr(data[0]), data.len())
+        if bytesCount == -1:
+            self.osError = errno
+            return 0
+        else:
+            result = bytesCount
 
 method close*(self: AsyncFile) =
     if not self.isClosed():
