@@ -22,18 +22,17 @@ method close*(self: AsyncTeeWriter)
 
 proc new*(T: type AsyncTeeReader; reader: AsyncIoBase, writer: AsyncIoBase): T =
     result = T(reader: reader, writer: writer)
-    result.init(readLock = reader.readLock and writer.writeLock, writeLock = nil)
+    result.init(readLock = reader.readLock, writeLock = nil)
 
 method readAvailableUnlocked(self: AsyncTeeReader, count: int, cancelFut: Future[void]): Future[string] {.async.} =
     result = await self.reader.readAvailableUnlocked(count, cancelFut)
     if result != "":
-        discard await self.writer.writeUnlocked(result, nil) # Warning : no cancelation possible to avoid unexpected behaviour
+        discard await self.writer.write(result, cancelFut) # isCancellation a good thing ?
 
 method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[string] {.async.} =
     result = await self.reader.readChunkUnlocked(cancelFut)
     if result != "":
-        discard await self.writer.writeUnlocked(result, nil) # Warning : no cancelation possible to avoid unexpected behaviour
-
+        discard await self.writer.write(result, cancelFut)
 
 method close*(self: AsyncTeeReader) =
     self.reader.close()
