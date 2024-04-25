@@ -98,22 +98,3 @@ proc writeSelect(self: AsyncFile): Future[void] =
         self.writeListener.trigger()
         true
     AsyncFD(self.fd).addWrite(cb)
-
-#[
-import terminal
-proc transferWithTerminalControl*(input, inputDest, controlDest: AsyncIoBase, cancelFut: Future[void] = nil) {.async.} =
-    ## input shall be unbuffered
-    ## controlDest need to be able to process the terminal controls (typically stdout)
-    ## Use rather a table as input to process also custom commands
-    ## 
-    ## Another solution is to spawn a true terminal which could be put on forground ?
-    withLock input.readLock, cancelFut:
-        while true:
-            let data = await input.readUnlocked(1, any(cancelFut, inputDest.cancelled, controlDest.cancelled))
-            if data == "":
-                break
-            ## Only send on newline char
-            let count = await dest.write(data, any(cancelFut, src.cancelled))
-            if count == 0:
-                break
-]#
