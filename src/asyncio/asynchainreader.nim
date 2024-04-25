@@ -3,12 +3,8 @@ import ./exports/asynciobase {.all.}
 import ./private/buffer
 
 type AsyncChainReader* = ref object of AsyncIoBase
+    ## An object that allows to read each stream one after another in order
     readers*: Deque[AsyncIoBase]
-
-
-proc new*(T: type AsyncChainReader, readers: varargs[AsyncIoBase]): T
-method readAvailableUnlocked(self: AsyncChainReader, count: int, cancelFut: Future[void]): Future[string]
-method readChunkUnlocked(self: AsyncChainReader, cancelFut: Future[void]): Future[string]
 
 
 proc new*(T: type AsyncChainReader, readers: varargs[AsyncIoBase]): T =
@@ -38,3 +34,13 @@ method readChunkUnlocked(self: AsyncChainReader, cancelFut: Future[void]): Futur
             return ""
         if result == "":
             discard self.readers.popFirst()
+
+method closeWhenFlushed*(self: AsyncChainReader) =
+    for stream in self.readers:
+        stream.closeWhenFlushed()
+
+method close*(self: AsyncChainReader) =
+    self.cancelled.trigger()
+    self.isClosed = true
+    for stream in self.readers:
+        stream.close()

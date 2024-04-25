@@ -2,23 +2,17 @@ import ./exports/asynciobase {.all.}
 
 type
     AsyncTeeReader* = ref object of AsyncIoBase
-        ## Reading from it, tees the output to a writer
+        ## Object that allows to clone/tee data when reading it
+        ## Meaning that reading from it will both read (and return) from underlying reader, and write the data to the underlying writer
         reader: AsyncIoBase
         writer: AsyncIoBase
     
     AsyncTeeWriter* = ref object of AsyncIoBase
-        ## Allows to write to multiple readers
+        ## Object that allows to clone data written to it to multiple writers
         writers*: seq[AsyncIoBase]
 
 
-proc new*(T: type AsyncTeeReader; reader: AsyncIoBase, writer: AsyncIoBase): T
-method readAvailableUnlocked(self: AsyncTeeReader, count: int, cancelFut: Future[void]): Future[string]
-method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[string]
-method close*(self: AsyncTeeReader)
-proc new*(T: type AsyncTeeWriter, writers: varargs[AsyncIoBase]): T
-method writeUnlocked(self: AsyncTeeWriter, data: string, cancelFut: Future[void] = nil): Future[int]
-method close*(self: AsyncTeeWriter)
-
+## AsyncTeeReader procs
 
 proc new*(T: type AsyncTeeReader; reader: AsyncIoBase, writer: AsyncIoBase): T =
     result = T(reader: reader, writer: writer)
@@ -34,9 +28,18 @@ method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[
     if result != "":
         discard await self.writer.write(result, cancelFut)
 
-method close*(self: AsyncTeeReader) =
-    self.reader.close()
+method closeWhenFlushed*(self: AsyncTeeReader) =
+    self.reader.closeWhenFlushed()
+    self.writer.closeWhenFlushed()
 
+method close*(self: AsyncTeeReader) =
+    self.cancelled.trigger()
+    self.isClosed = true
+    self.reader.close()
+    self.writer.close()
+
+
+## AsyncTeeWriter procs
 
 proc new*(T: type AsyncTeeWriter, writers: varargs[AsyncIoBase]): T =
     result = T(writers: @writers)
@@ -52,6 +55,12 @@ method writeUnlocked(self: AsyncTeeWriter, data: string, cancelFut: Future[void]
     for res in (await all(allFuts)):
         result += res
 
+method closeWhenFlushed*(self: AsyncTeeWriter) =
+    for w in self.writers:
+        w.closeWhenFlushed()
+
 method close*(self: AsyncTeeWriter) =
-    for writer in self.writers:
-        writer.close()
+    self.cancelled.trigger()
+    self.isClosed = true
+    for w in self.writers:
+        w.close()

@@ -13,6 +13,7 @@ proc readLine*(self: Buffer, keepNewLine = false): string
 proc readChunk*(self: Buffer): string
 proc readAll*(self: Buffer): string
 proc write*(self: Buffer, data: sink string)
+proc clear*(self: Buffer)
 proc len*(self: Buffer): int
 proc isEmpty*(self: Buffer): bool
 
@@ -69,6 +70,9 @@ proc readAll*(self: Buffer): string =
 
 proc write*(self: Buffer, data: sink string) =
     self.queue.addLast(data)
+
+proc clear*(self: Buffer) =
+    self.queue.clear()
 
 proc len*(self: Buffer): int =
     for i in self.queue.items():

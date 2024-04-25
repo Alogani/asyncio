@@ -1,7 +1,8 @@
 import ./exports/asynciobase {.all.}
 
 type AsyncVoid* = ref object of AsyncIoBase
-    ## Equivalent of a /dev/null
+    ## AsyncObject that does nothing and can only be written to
+    ## Equivalent of a /dev/null, write to it will do nothing
 
 proc new*(T: type AsyncVoid): T
 method writeUnlocked(self: AsyncVoid, data: string, cancelFut: Future[void]): Future[int]
@@ -13,4 +14,13 @@ proc new*(T: type AsyncVoid): T =
 
 method writeUnlocked(self: AsyncVoid, data: string, cancelFut: Future[void]): Future[int] =
     result = newFuture[int]()
-    result.complete(data.len())
+    if self.isClosed:
+        result.complete(0)
+    else:
+        result.complete(data.len())
+
+method closeWhenFlushed*(self: AsyncVoid) =
+    discard
+
+method close*(self: AsyncVoid) =
+    self.isClosed = true
