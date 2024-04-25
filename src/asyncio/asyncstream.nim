@@ -10,7 +10,7 @@ type AsyncStream* = ref object of AsyncIoBase
     hasData: Event
 
 proc new*(T: type AsyncStream): T
-proc bufLen*(self: AsyncBuffer): int
+proc bufLen*(self: AsyncStream): int
 method readAvailableUnlocked(self: AsyncStream, count: int, cancelFut: Future[void]): Future[string]
 method readChunkUnlocked(self: AsyncStream, cancelFut: Future[void]): Future[string]
 method writeUnlocked(self: AsyncStream, data: string, cancelFut: Future[void]): Future[int]

@@ -1,5 +1,5 @@
 import std/unittest
-import asyncio, asyncio/asyncbuffer
+import asyncio, asyncio/[asyncstream, asyncbuffer]
 
 import std/strutils
 
@@ -18,12 +18,12 @@ proc main() {.async.} =
         check unbufferedStream.bufLen() == 0
         check bufferedStream.bufLen() == (0, 50)
 
-    test "Write more than buffer"
+    test "Write more than buffer":
         discard await bufferedStream.write("A".repeat(200))
         check unbufferedStream.bufLen() == 250
         check bufferedStream.bufLen() == (0, 0)
 
-    test "Read on empty buffer"
+    test "Read on empty buffer":
         check "A".repeat(10) == (await bufferedStream.read(10))
         check unbufferedStream.bufLen() == 150
         check bufferedStream.bufLen() == (bufSize - 10, 0)
@@ -42,8 +42,8 @@ proc main() {.async.} =
         discard await bufferedStream.write("A".repeat(200))
         unbufferedStream.close()
         discard (await bufferedStream.read(10))
-        check unbufferedStream.bufLen() == 200
-        check bufferedStream.bufLen() == (140, 0)
+        check unbufferedStream.bufLen() == 250
+        check bufferedStream.bufLen() == (90, 0)
         check "A".repeat(340) == (await bufferedStream.readAll())
 
 
