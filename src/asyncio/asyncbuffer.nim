@@ -19,10 +19,6 @@ proc flush*(self: AsyncBuffer, cancelFut: Future[void] = nil): Future[int]
 proc fillBuffer*(self: AsyncBuffer, count: int = 0, cancelFut: Future[void] = nil): Future[int]
 proc fillBufferUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[void]): Future[int] {.async.}
 proc bufLen*(self: AsyncBuffer): tuple[readBuffer, writeBuffer: int]
-method readAvailableUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[void]): Future[string]
-method readChunkUnlocked(self: AsyncBuffer, cancelFut: Future[void]): Future[string]
-method writeUnlocked(self: AsyncBuffer, data: string, cancelFut: Future[void]): Future[int]
-method close*(self: AsyncBuffer)
 
 
 proc new*(T: type AsyncBuffer, stream: AsyncIoBase, bufSize = defaultBufSize): T =
@@ -54,6 +50,7 @@ proc fillBufferUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[void]):
 proc bufLen*(self: AsyncBuffer): tuple[readBuffer, writeBuffer: int] =
     (self.readBuffer.len(), self.writeBuffer.len())
  
+
 method readAvailableUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[void]): Future[string] {.async.} =
     if self.readBuffer.len() < count:
         discard await self.fillBufferUnlocked(max(count, self.readBufSize), cancelFut)
@@ -73,5 +70,10 @@ method writeUnlocked(self: AsyncBuffer, data: string, cancelFut: Future[void]): 
     else:
         return dataLen
 
+method closeWhenFlushed*(self: AsyncBuffer) =
+    self.stream.closeWhenFlushed()
+
 method close*(self: AsyncBuffer) =
+    self.cancelled.trigger()
+    self.isClosed = true
     self.stream.close()

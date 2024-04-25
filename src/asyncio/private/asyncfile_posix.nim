@@ -5,6 +5,7 @@ type AsyncFile* = ref object of AsyncIoBase
     ## An AsyncFile implementation close to C methods
     fd*: cint
     osError*: cint
+    pendingClosed: bool
     pollable: bool
     unregistered: bool
     readListener: Listener
@@ -18,6 +19,7 @@ proc readSelect(self: AsyncFile): Future[void]
 proc writeSelect(self: AsyncFile): Future[void]
 method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[void]): Future[string]
 method writeUnlocked(self: AsyncFile, data: string, cancelFut: Future[void]): Future[int]
+method closeWhenFlushed*(self: AsyncFile)
 method close*(self: AsyncFile)
 
 
@@ -51,6 +53,8 @@ method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[void
     if await checkWithCancel(self.readSelect(), any(cancelFut, self.cancelled)):
         result = newString(count)
         let bytesCount = posix.read(self.fd, addr(result[0]), count)
+        if bytesCount <= 0 and self.pendingClosed:
+            self.close()
         if bytesCount == -1:
             self.osError = errno
             result.setLen(0)
@@ -65,6 +69,11 @@ method writeUnlocked(self: AsyncFile, data: string, cancelFut: Future[void]): Fu
             return 0
         else:
             result = bytesCount
+
+method closeWhenFlushed*(self: AsyncFile) =
+    ## Only close when EOF is reached on reading
+    ## if reader is not read completly, it will result in file descriptor leak
+    self.pendingClosed = true
 
 method close*(self: AsyncFile) =
     if not self.isClosed():

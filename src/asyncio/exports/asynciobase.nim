@@ -41,7 +41,8 @@ method readChunkUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[str
 method readLineUnlocked(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void]): Future[string]
 method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string]
 method writeUnlocked(self: AsyncIoBase, data: string, cancelFut: Future[void]): Future[int] = discard
-method close*(self: AsyncIoBase) {.gcsafe.}
+method closeWhenFlushed*(self: AsyncIoBase) {.gcsafe.} = discard
+method close*(self: AsyncIoBase) {.gcsafe.} = discard
 {.pop.}
 {.push inline used.} # For children va import {.all.}
 proc init(self: AsyncIoBase, readLock: Lock, writeLock: Lock)
@@ -111,10 +112,6 @@ proc cancelAll*(self: AsyncIoBase) =
 proc clear*(self: AsyncIoBase) {.async.} =
     self.cancelAll()
     discard await self.readAll(sleepAsync(ClearWaitMS))
-
-method close*(self: AsyncIoBase) =
-    self.cancelled.trigger()
-    self.isClosed = true
 
 proc init(self: AsyncIoBase, readLock: Lock, writeLock: Lock) =
     self.readLock = readLock
