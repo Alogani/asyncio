@@ -58,6 +58,8 @@ method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[void
             self.eofReached = true
             if self.pendingClosed:
                 self.close()
+        else:
+            self.eofReached = false
         if bytesCount == -1:
             self.osError = errno
             result.setLen(0)

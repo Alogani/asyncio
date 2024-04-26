@@ -6,6 +6,8 @@ type
         ## Meaning that reading from it will both read (and return) from underlying reader, and write the data to the underlying writer
         reader: AsyncIoBase
         writer: AsyncIoBase
+        eofReached: bool
+        pendingClosed: bool
     
     AsyncTeeWriter* = ref object of AsyncIoBase
         ## Object that allows to clone data written to it to multiple writers
@@ -22,15 +24,29 @@ method readAvailableUnlocked(self: AsyncTeeReader, count: int, cancelFut: Future
     result = await self.reader.readAvailableUnlocked(count, cancelFut)
     if result != "":
         discard await self.writer.write(result, cancelFut) # isCancellation a good thing ?
+        self.eofReached = false
+    else:
+        self.eofReached = true
+        if self.pendingClosed:
+            self.close()
 
 method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[string] {.async.} =
     result = await self.reader.readChunkUnlocked(cancelFut)
     if result != "":
         discard await self.writer.write(result, cancelFut)
+        self.eofReached = false
+    else:
+        self.eofReached = true
+        if self.pendingClosed:
+            self.close()
 
 method closeWhenFlushed*(self: AsyncTeeReader) =
-    self.reader.closeWhenFlushed()
-    self.writer.closeWhenFlushed()
+    ## Only close when EOF is reached on reading
+    ## if reader is not read completly, it will result in file descriptor leak
+    if self.eofReached:
+        self.close()
+    else:
+        self.pendingClosed = true
 
 method close*(self: AsyncTeeReader) =
     self.cancelled.trigger()

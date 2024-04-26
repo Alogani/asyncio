@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.2.1"
+version       = "0.2.2"
 author        = "alogani"
 description   = "Async files and streams tools"
 license       = "MIT"
