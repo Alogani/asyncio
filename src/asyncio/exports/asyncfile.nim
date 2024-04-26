@@ -13,3 +13,8 @@ proc new*(T: type AsyncFile, file: File): T =
 
 proc new*(T: type AsyncFile, path: string, mode = fmRead): T =
     T.new(open(path, mode))
+
+let
+    stdinAsync* = AsyncFile.new(stdin)
+    stdoutAsync* = AsyncFile.new(stdout)
+    stderrAsync* = AsyncFile.new(stderr)
