@@ -6,8 +6,8 @@ type
         ## Meaning that reading from it will both read (and return) from underlying reader, and write the data to the underlying writer
         reader: AsyncIoBase
         writer: AsyncIoBase
-        eofReached: bool
         pendingClosed: bool
+        eofReached: bool
     
     AsyncTeeWriter* = ref object of AsyncIoBase
         ## Object that allows to clone data written to it to multiple writers
@@ -28,7 +28,7 @@ method readAvailableUnlocked(self: AsyncTeeReader, count: int, cancelFut: Future
     else:
         self.eofReached = true
         if self.pendingClosed:
-            self.close()
+            self.writer.closeWhenFlushed()
 
 method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[string] {.async.} =
     result = await self.reader.readChunkUnlocked(cancelFut)
@@ -38,22 +38,22 @@ method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[
     else:
         self.eofReached = true
         if self.pendingClosed:
-            self.close()
+            self.writer.closeWhenFlushed()
 
 method closeWhenFlushed*(self: AsyncTeeReader) =
-    ## Only close when EOF is reached on reading
-    ## if reader is not read completly, it will result in file descriptor leak
+    self.reader.closeWhenFlushed()
     if self.eofReached:
-        self.close()
+        self.writer.closeWhenFlushed()
     else:
         self.pendingClosed = true
 
 method close*(self: AsyncTeeReader) =
     self.cancelled.trigger()
-    self.isClosed = true
     self.reader.close()
     self.writer.close()
 
+method isClosed*(self: AsyncTeeReader): bool =
+    raise newException(ValueError, "Can't determine it for this object")
 
 ## AsyncTeeWriter procs
 
@@ -80,3 +80,6 @@ method close*(self: AsyncTeeWriter) =
     self.isClosed = true
     for w in self.writers:
         w.close()
+
+method isClosed*(self: AsyncTeeWriter): bool =
+    raise newException(ValueError, "Can't determine it for this object")

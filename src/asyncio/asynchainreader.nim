@@ -4,7 +4,7 @@ import ./private/buffer
 
 type AsyncChainReader* = ref object of AsyncIoBase
     ## An object that allows to read each stream one after another in order
-    readers*: Deque[AsyncIoBase]
+    readers: Deque[AsyncIoBase]
 
 
 proc new*(T: type AsyncChainReader, readers: varargs[AsyncIoBase]): T =
@@ -14,10 +14,17 @@ proc new*(T: type AsyncChainReader, readers: varargs[AsyncIoBase]): T =
         allReaderLocks.add(r.readLock)
     result.init(readLock = allReaderLocks.merge(), writeLock = nil)
 
+proc addReader*(self: AsyncChainReader, readers: varargs[AsyncIoBase]) =
+    if self.isClosed:
+        self.isClosed = false
+        self.cancelled.clear()
+    for r in readers:
+        self.readers.addLast r
 
 method readAvailableUnlocked(self: AsyncChainReader, count: int, cancelFut: Future[void]): Future[string] {.async.} =
     while result == "":
         if self.readers.len() == 0:
+            self.close()
             return ""
         result = await self.readers[0].readUnlocked(count, cancelFut)
         if cancelFut != nil and cancelFut.finished():
@@ -28,6 +35,7 @@ method readAvailableUnlocked(self: AsyncChainReader, count: int, cancelFut: Futu
 method readChunkUnlocked(self: AsyncChainReader, cancelFut: Future[void]): Future[string] {.async.} =
     while result == "":
         if self.readers.len() == 0:
+            self.close()
             return ""
         result = await self.readers[0].readChunkUnlocked(cancelFut)
         if cancelFut != nil and cancelFut.finished():

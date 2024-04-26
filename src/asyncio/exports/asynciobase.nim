@@ -41,12 +41,13 @@ method readChunkUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[str
 method readLineUnlocked(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void]): Future[string]
 method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string]
 method writeUnlocked(self: AsyncIoBase, data: string, cancelFut: Future[void]): Future[int] = discard
+method isClosed*(self: AsyncIoBase): bool {.gcsafe.}
 method closeWhenFlushed*(self: AsyncIoBase) {.gcsafe.} = discard
 method close*(self: AsyncIoBase) {.gcsafe.} = discard
 {.pop.}
 {.push inline used.} # For children va import {.all.}
 proc init(self: AsyncIoBase, readLock: Lock, writeLock: Lock)
-proc isClosed*(self: AsyncIoBase): bool = self.isClosed
+proc isClosedImpl(self: AsyncIoBase): bool = self.isClosed
 proc `isClosed=`(self: AsyncIoBase, state: bool) = self.isClosed = state
 proc readLock(self: AsyncIoBase): Lock = self.readLock
 proc writeLock(self: AsyncIoBase): Lock = self.writeLock
@@ -147,3 +148,6 @@ method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[strin
         if data == "":
             break
         result.add(data)
+
+method isClosed(self: AsyncIoBase): bool =
+    self.isClosedImpl()
