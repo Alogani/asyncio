@@ -1,5 +1,7 @@
 import ./exports/asynciobase {.all.}
 
+import asyncsync, asyncsync/[lock]
+
 type AsyncVoid* = ref object of AsyncIoBase
     ## AsyncObject that does nothing and can only be written to
     ## Equivalent of a /dev/null, write to it will do nothing
@@ -18,9 +20,6 @@ method writeUnlocked(self: AsyncVoid, data: string, cancelFut: Future[void]): Fu
         result.complete(0)
     else:
         result.complete(data.len())
-
-method closeWhenFlushed*(self: AsyncVoid) =
-    discard
 
 method close*(self: AsyncVoid) =
     self.isClosed = true

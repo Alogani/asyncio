@@ -1,5 +1,5 @@
 import std/[asyncdispatch]
-import asyncsync
+import asyncsync, asyncsync/[lock, event]
 export asyncsync
 
 type
@@ -31,7 +31,7 @@ proc readLine*(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void] =
 proc readAll*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[string]
 proc write*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[int]
 proc writeDiscard*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[void]
-proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil): Future[void]
+proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil, flushAndCloseAfter = false): Future[void]
 proc cancelAll*(self: AsyncIoBase)
 proc clear*(self: AsyncIoBase): Future[void]
 {.push base.} # Implementation details
@@ -41,13 +41,11 @@ method readChunkUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[str
 method readLineUnlocked(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void]): Future[string]
 method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string]
 method writeUnlocked(self: AsyncIoBase, data: string, cancelFut: Future[void]): Future[int] = discard
-method isClosed*(self: AsyncIoBase): bool {.gcsafe.}
-method closeWhenFlushed*(self: AsyncIoBase) {.gcsafe.} = discard
 method close*(self: AsyncIoBase) {.gcsafe.} = discard
 {.pop.}
 {.push inline used.} # For children va import {.all.}
 proc init(self: AsyncIoBase, readLock: Lock, writeLock: Lock)
-proc isClosedImpl(self: AsyncIoBase): bool = self.isClosed
+proc isClosed*(self: AsyncIoBase): bool = self.isClosed
 proc `isClosed=`(self: AsyncIoBase, state: bool) = self.isClosed = state
 proc readLock(self: AsyncIoBase): Lock = self.readLock
 proc writeLock(self: AsyncIoBase): Lock = self.writeLock
@@ -85,7 +83,10 @@ proc write*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Fut
 proc writeDiscard*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[void] =
     cast[Future[void]](self.write(data, cancelFut))
 
-proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil): Future[void] {.async.} =
+proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil, flushAndCloseAfter = false): Future[void] {.async.} =
+    ## Transfer read from src immediatly to dest
+    ## Returns a future when completed
+    ## src will be cleared and closed if closeAfter is set to true
     withLock src.readLock, cancelFut:
         while true:
             let data = await src.readChunkUnlocked(any(cancelFut, dest.cancelled))
@@ -94,6 +95,9 @@ proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil): Future[vo
             let count = await dest.write(data, any(cancelFut, src.cancelled))
             if count == 0:
                 break
+    if flushAndCloseAfter:
+        await src.clear()
+        src.close()
 
 proc cancelAll*(self: AsyncIoBase) =
     if self.cancelled.isTriggered():
@@ -112,7 +116,9 @@ proc cancelAll*(self: AsyncIoBase) =
 
 proc clear*(self: AsyncIoBase) {.async.} =
     self.cancelAll()
-    discard await self.readAll(sleepAsync(ClearWaitMS))
+    while true:
+        if (await self.readChunk(sleepAsync(ClearWaitMS))) == "":
+            break
 
 proc init(self: AsyncIoBase, readLock: Lock, writeLock: Lock) =
     self.readLock = readLock
@@ -148,6 +154,3 @@ method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[strin
         if data == "":
             break
         result.add(data)
-
-method isClosed(self: AsyncIoBase): bool =
-    self.isClosedImpl()

@@ -2,6 +2,8 @@ import std/deques
 import ./exports/asynciobase {.all.}
 import ./private/buffer
 
+import asyncsync, asyncsync/[lock, event]
+
 type AsyncChainReader* = ref object of AsyncIoBase
     ## An object that allows to read each stream one after another in order
     readers: Deque[AsyncIoBase]
@@ -42,10 +44,6 @@ method readChunkUnlocked(self: AsyncChainReader, cancelFut: Future[void]): Futur
             return ""
         if result == "":
             discard self.readers.popFirst()
-
-method closeWhenFlushed*(self: AsyncChainReader) =
-    for stream in self.readers:
-        stream.closeWhenFlushed()
 
 method close*(self: AsyncChainReader) =
     self.cancelled.trigger()

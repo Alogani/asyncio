@@ -1,17 +1,20 @@
 import ./exports/asynciobase {.all.}
 import ./private/buffer
 
+import asyncsync, asyncsync/[lock, event]
+
 const defaultBufSize = 1024 # Is this a good default ?
 
 type
     AsyncBuffer* = ref object of AsyncIoBase
         ## An object that allow to bufferize other AsyncIoBase objects
         ## Slower for local files
+        stream*: AsyncIoBase
         readBuffer: Buffer
         readBufSize: int
         writeBuffer: Buffer
         writeBufSize: int
-        stream: AsyncIoBase
+        
 
 proc new*(T: type AsyncBuffer, stream: AsyncIoBase, bufSize = defaultBufSize): T
 proc new*(T: type AsyncBuffer, stream: AsyncIoBase, readBufSize, writeBufSize: int): T
@@ -69,9 +72,6 @@ method writeUnlocked(self: AsyncBuffer, data: string, cancelFut: Future[void]): 
         return await self.stream.writeUnlocked(self.writeBuffer.readAll(), cancelFut)
     else:
         return dataLen
-
-method closeWhenFlushed*(self: AsyncBuffer) =
-    self.stream.closeWhenFlushed()
 
 method close*(self: AsyncBuffer) =
     self.cancelled.trigger()

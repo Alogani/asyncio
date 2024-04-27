@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.2.2"
+version       = "0.3.0"
 author        = "alogani"
 description   = "Async files and streams tools"
 license       = "MIT"
@@ -10,7 +10,7 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 2.0.2"
-requires "asyncsync >= 0.1.1"
+requires "asyncsync >= 0.2.0"
 
 
 task reinstall, "Reinstalls this package":

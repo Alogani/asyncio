@@ -7,7 +7,6 @@ proc main() {.async.} =
             AsyncString.new("a", "b", "c"),
             AsyncString.new("d", "e", "f")
         )
-        stream.closeWhenFlushed()
         check (await stream.readAll()) == "abcdef"
         check stream.isClosed
 

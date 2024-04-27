@@ -1,5 +1,7 @@
 import ./exports/asynciobase {.all.}
 
+import asyncsync, asyncsync/[event]
+
 type AsyncIoDelayed* = ref object of AsyncIoBase
     ## An object that permits to add a delay before each read or write is executed
     stream: AsyncIoBase
@@ -22,9 +24,6 @@ method readChunkUnlocked(self: AsyncIoDelayed, cancelFut: Future[void]): Future[
 method writeUnlocked(self: AsyncIoDelayed, data: string, cancelFut: Future[void]): Future[int] {.async.} =
     await sleepAsync(self.delayMs)
     return await self.stream.writeUnlocked(data, cancelFut)
-
-method closeWhenFlushed*(self: AsyncIoDelayed) =
-    self.stream.closeWhenFlushed()
 
 method close*(self: AsyncIoDelayed) =
     self.cancelled.trigger()

@@ -1,28 +1,28 @@
 import std/unittest
-import asyncio
+import asyncio, asyncio/[asyncstream, asyncpipe]
 
-proc pipeTester*(name: string, T: type AsyncIoBase) =
+proc pipeTester*[T: AsyncStream or AsyncPipe](name: string, OT: type T) =
     test name:
-        var a = T.new()
-        var b = T.new()
+        var a = OT.new()
+        var b = OT.new()
         discard waitFor a.write("data\n")
         check (waitFor a.readLine()) == "data"
         discard waitFor b.write("data2\n")
-        b.closeWhenFlushed()
+        b.closeWriter()
         check (waitFor b.readAll()) == "data2\n"
 
-        a = T.new()
-        b = T.new()
+        a = OT.new()
+        b = OT.new()
         discard waitFor a.write("data\n")
-        a.closeWhenFlushed()
+        a.closeWriter()
         waitFor a.transfer(b)
-        b.closeWhenFlushed()
+        b.closeWriter()
         check (waitFor b.readAll()) == "data\n"
 
-        a = T.new()
-        b = T.new()
+        a = OT.new()
+        b = OT.new()
         discard waitFor a.write("data")
-        a.closeWhenFlushed()
+        a.closeWriter()
         waitFor a.transfer(b)
-        b.closeWhenFlushed()
+        b.closeWriter()
         check (waitFor b.readAll()) == "data"

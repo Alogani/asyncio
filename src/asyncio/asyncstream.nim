@@ -1,6 +1,7 @@
 import ./exports/asynciobase {.all.}
 import ./private/buffer
 
+import asyncsync, asyncsync/[lock, event]
 
 type AsyncStream* = ref object of AsyncIoBase
     ## An in-memory async buffer
@@ -12,10 +13,10 @@ type AsyncStream* = ref object of AsyncIoBase
 
 proc new*(T: type AsyncStream): T
 proc bufLen*(self: AsyncStream): int
+proc closeWriter*(self: AsyncStream)
 method readAvailableUnlocked(self: AsyncStream, count: int, cancelFut: Future[void]): Future[string]
 method readChunkUnlocked(self: AsyncStream, cancelFut: Future[void]): Future[string]
 method writeUnlocked(self: AsyncStream, data: string, cancelFut: Future[void]): Future[int]
-method closeWhenFlushed*(self: AsyncStream) {.gcsafe.}
 method close*(self: AsyncStream) {.gcsafe.}
 
 proc new*(T: type AsyncStream): T =
@@ -25,14 +26,16 @@ proc new*(T: type AsyncStream): T =
 proc bufLen*(self: AsyncStream): int =
     return self.buffer.len()
 
+proc closeWriter*(self: AsyncStream) =
+    if self.buffer.isEmpty():
+        self.close()
+    else:
+        self.writeClosed = true
+
 method readAvailableUnlocked(self: AsyncStream, count: int, cancelFut: Future[void]): Future[string] {.async.} =
     if self.isClosed:
         return
-    if self.writeClosed:
-        if self.buffer.isEmpty():
-            self.close()
-            return
-    else:
+    elif not self.writeClosed:
         await any(self.hasData.wait(), cancelFut, self.cancelled)
     result = self.buffer.read(count)
     if self.buffer.isEmpty():
@@ -41,11 +44,7 @@ method readAvailableUnlocked(self: AsyncStream, count: int, cancelFut: Future[vo
 method readChunkUnlocked(self: AsyncStream, cancelFut: Future[void]): Future[string] {.async.} =
     if self.isClosed:
         return
-    if self.writeClosed:
-        if self.buffer.isEmpty():
-            self.close()
-            return
-    else:
+    elif not self.writeClosed:
         await any(self.hasData.wait(), cancelFut, self.cancelled)
     result = self.buffer.readChunk()
     if self.buffer.isEmpty():
@@ -57,12 +56,6 @@ method writeUnlocked(self: AsyncStream, data: string, cancelFut: Future[void]): 
     self.hasData.trigger()
     self.buffer.write(data)
     return data.len()
-
-method closeWhenFlushed*(self: AsyncStream) =
-    if self.buffer.isEmpty():
-        self.close()
-    else:
-        self.writeClosed = true
 
 method close*(self: AsyncStream) =
     self.buffer.clear()

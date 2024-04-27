@@ -8,9 +8,9 @@ type AsyncPipe* = ref object of AsyncIoBase
 
 
 proc new*(T: type AsyncPipe): T
+proc closeWriter*(self: AsyncPipe)
 method readAvailableUnlocked(self: AsyncPipe, count: int, cancelFut: Future[void]): Future[string]
 method writeUnlocked(self: AsyncPipe, data: string, cancelFut: Future[void]): Future[int]
-method closeWhenFlushed*(self: AsyncPipe)
 method close*(self: AsyncPipe)
 
 
@@ -22,17 +22,15 @@ proc new*(T: type AsyncPipe): T =
     result = AsyncPipe(reader: reader, writer: writer)
     result.init(reader.readLock, writer.writeLock)
 
+proc closeWriter*(self: AsyncPipe) =
+    ## Writer will be closed, this ensures reader will reach eof
+    self.writer.close()
+
 method readAvailableUnlocked(self: AsyncPipe, count: int, cancelFut: Future[void]): Future[string] {.async.} =
     await self.reader.readAvailableUnlocked(count, cancelFut)
 
 method writeUnlocked(self: AsyncPipe, data: string, cancelFut: Future[void]): Future[int] {.async.} =
     await self.writer.writeUnlocked(data, cancelFut)
-
-method closeWhenFlushed*(self: AsyncPipe) =
-    ## Writer will be closed, and reader only when EOF is reached
-    ## if reader is not read completly, it will result in file descriptor leak
-    self.reader.closeWhenFlushed()
-    self.writer.close()
 
 method close*(self: AsyncPipe) =
     self.reader.close()
