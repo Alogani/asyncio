@@ -8,21 +8,21 @@ proc pipeTester*[T: AsyncStream or AsyncPipe](name: string, OT: type T) =
         discard waitFor a.write("data\n")
         check (waitFor a.readLine()) == "data"
         discard waitFor b.write("data2\n")
-        b.closeWriter()
+        b.writer.close()
         check (waitFor b.readAll()) == "data2\n"
 
         a = OT.new()
         b = OT.new()
         discard waitFor a.write("data\n")
-        a.closeWriter()
+        a.writer.close()
         waitFor a.transfer(b)
-        b.closeWriter()
+        b.writer.close()
         check (waitFor b.readAll()) == "data\n"
 
         a = OT.new()
         b = OT.new()
         discard waitFor a.write("data")
-        a.closeWriter()
+        a.writer.close()
         waitFor a.transfer(b)
-        b.closeWriter()
+        b.writer.close()
         check (waitFor b.readAll()) == "data"

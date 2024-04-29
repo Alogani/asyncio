@@ -1,63 +1,88 @@
 import ./exports/asynciobase {.all.}
+import ./asynctwoend
 import ./private/buffer
 
 import asyncsync, asyncsync/[lock, event]
 
-type AsyncStream* = ref object of AsyncIoBase
-    ## An in-memory async buffer
-    ## Because it is async (read pending for data), it can be highly subjects to deadlocks
-    ## To avoid deadlocks: ensure there is always one writer and to close AsyncStream if there is no more writers
-    buffer: Buffer
-    hasData: Event
-    writeClosed: bool
+type
+    AsyncStream* = ref object of AsyncTwoEnd
+        ## An in-memory async buffer
+        ## Because it is async (read pending for data), it can be highly subjects to deadlocks
+        ## To avoid deadlocks: ensure to a least close writer when finished
+        ## Not thread safe
+    
+    AsyncStreamReader* = ref object of AsyncIoBase
+        ## Can't be instantiated directly
+        buffer: Buffer
+        hasData: Event
+        writerClosed: ref bool
 
-proc new*(T: type AsyncStream): T
-proc bufLen*(self: AsyncStream): int
-proc closeWriter*(self: AsyncStream)
-method readAvailableUnlocked(self: AsyncStream, count: int, cancelFut: Future[void]): Future[string]
-method readChunkUnlocked(self: AsyncStream, cancelFut: Future[void]): Future[string]
-method writeUnlocked(self: AsyncStream, data: string, cancelFut: Future[void]): Future[int]
-method close*(self: AsyncStream) {.gcsafe.}
+    AsyncStreamWriter* = ref object of AsyncIoBase
+        ## Can't be instantiated directly
+        buffer: Buffer
+        hasData: Event
+        writerClosed: ref bool
+
+proc new(T: type AsyncStreamReader, buffer: Buffer, hasData: Event, writerClosed: ref bool): T =
+    result = T(buffer: buffer, hasData: hasData, writerClosed: writerClosed)
+    result.init(readLock = Lock.new(), writeLock = nil)
+
+proc new(T: type AsyncStreamWriter, buffer: Buffer, hasData: Event, writerClosed: ref bool): T =
+    result = T(buffer: buffer, hasData: hasData, writerClosed: writerClosed)
+    result.init(readLock = nil, writeLock = Lock.new())
 
 proc new*(T: type AsyncStream): T =
-    result = T(buffer: Buffer.new(), hasData: Event.new())
-    result.init(readLock = Lock.new(), writeLock = Lock.new())
+    var
+        buffer = Buffer.new()
+        hasData = Event.new()
+        writerClosed = new bool
+    result = T()
+    result.init(
+        reader = AsyncStreamReader.new(buffer, hasData, writerClosed),
+        writer = AsyncStreamWriter.new(buffer, hasData, writerClosed)
+    )
 
-proc bufLen*(self: AsyncStream): int =
-    return self.buffer.len()
+proc reader*(self: AsyncStream): AsyncStreamReader = (procCall self.AsyncTwoEnd.reader()).AsyncStreamReader
+proc writer*(self: AsyncStream): AsyncStreamWriter = (procCall self.AsyncTwoEnd.writer()).AsyncStreamWriter
+proc bufLen*(self: AsyncStream): int = self.reader.buffer.len()
+proc bufLen*(self: AsyncStreamReader): int = self.buffer.len()
+proc bufLen*(self: AsyncStreamWriter): int = self.buffer.len()
 
-proc closeWriter*(self: AsyncStream) =
-    if self.buffer.isEmpty():
-        self.close()
-    else:
-        self.writeClosed = true
 
-method readAvailableUnlocked(self: AsyncStream, count: int, cancelFut: Future[void]): Future[string] {.async.} =
+method readAvailableUnlocked(self: AsyncStreamReader, count: int, cancelFut: Future[void]): Future[string] {.async.} =
     if self.isClosed:
         return
-    elif not self.writeClosed:
+    if not self.writerClosed[]:
         await any(self.hasData.wait(), cancelFut, self.cancelled)
     result = self.buffer.read(count)
     if self.buffer.isEmpty():
         self.hasData.clear()
 
-method readChunkUnlocked(self: AsyncStream, cancelFut: Future[void]): Future[string] {.async.} =
+method readChunkUnlocked(self: AsyncStreamReader, cancelFut: Future[void]): Future[string] {.async.} =
     if self.isClosed:
         return
-    elif not self.writeClosed:
+    if not self.writerClosed[]:
         await any(self.hasData.wait(), cancelFut, self.cancelled)
-    result = self.buffer.readChunk()
-    if self.buffer.isEmpty():
-        self.hasData.clear()
+        result = self.buffer.readChunk()
+        if self.buffer.isEmpty():
+            self.hasData.clear()
+    else:
+        result = self.buffer.readChunk()
 
-method writeUnlocked(self: AsyncStream, data: string, cancelFut: Future[void]): Future[int] {.async.} =
-    if self.isClosed or self.writeClosed:
+method writeUnlocked(self: AsyncStreamWriter, data: string, cancelFut: Future[void]): Future[int] {.async.} =
+    if self.isClosed or self.writerClosed[]:
         return 0
     self.hasData.trigger()
     self.buffer.write(data)
     return data.len()
 
-method close*(self: AsyncStream) =
+method close*(self: AsyncStreamReader) =
     self.buffer.clear()
     self.isClosed = true
     self.cancelled.trigger()
+
+method close*(self: AsyncStreamWriter) =
+    self.isClosed = true
+    self.cancelled.trigger()
+    self.hasData.trigger()
+    self.writerClosed[] = true

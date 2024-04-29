@@ -10,7 +10,7 @@ proc main() {.async.} =
                 capture
             )
         check (await stream.readAll()) == "Hello"
-        capture.closeWriter()
+        capture.writer.close()
         check (await capture.readAll()) == "Hello"
 
     test "AsyncTeeWriter":
@@ -19,8 +19,8 @@ proc main() {.async.} =
             s2 = AsyncStream.new()
             stream = AsyncTeeWriter.new(s1, s2)
         check (await stream.write("Hello")) > 0
-        s1.closeWriter()
-        s2.closeWriter()
+        s1.writer.close()
+        s2.writer.close()
         check (await s1.readAll()) == "Hello"
         check (await s2.readAll()) == "Hello"
 
@@ -29,8 +29,8 @@ proc main() {.async.} =
             s1 = AsyncStream.new()
             s2 = AsyncStream.new()
             stream = AsyncTeeWriter.new(s1, s2)
-        s1.closeWriter()
-        s2.closeWriter()
+        s1.writer.close()
+        s2.writer.close()
         check (await stream.write("Hello")) == 0
         check (await s1.readAll()) == ""
         check (await s2.readAll()) == ""

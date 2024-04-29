@@ -13,4 +13,4 @@ proc new*(T: type AsyncString, data: varargs[string]): T =
     result = cast[AsyncString](AsyncStream.new())
     for chunk in data:
         discard result.writeUnlocked(chunk, nil)
-    result.closeWriter()
+    result.writer.close()

@@ -40,7 +40,7 @@ proc main() {.async.} =
 
     test "Read all":
         discard await bufferedStream.write("A".repeat(200))
-        unbufferedStream.closeWriter()
+        unbufferedStream.writer.close()
         discard (await bufferedStream.read(10))
         check unbufferedStream.bufLen() == 250
         check bufferedStream.bufLen() == (90, 0)
