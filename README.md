@@ -24,7 +24,7 @@ Asynchronous streams and files manipulation utilities in an object oriented mann
 
 `nimble install asyncio`
 
-### Usage (linux)
+### Example usage (linux)
 
 ```
 import asyncio
