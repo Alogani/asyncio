@@ -10,7 +10,7 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 2.0.2"
-requires "asyncsync >= 0.2.0"
+requires "asyncsync >= 0.2.1"
 
 
 task reinstall, "Reinstalls this package":
