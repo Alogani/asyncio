@@ -14,6 +14,11 @@ requires "asyncsync ~= 0.2.1"
 
 
 task reinstall, "Reinstalls this package":
-    var path = "~/.nimble/pkgs2/" & projectName() & "-" & $version & "-*"
-    exec("rm -rf " & path)
+    exec("nimble remove " & projectName())
     exec("nimble install")
+
+task buildDocs, "Build the docs":
+    ## importBuilder source code: https://github.com/Alogani/shellcmd-examples/blob/main/src/importbuilder.nim
+    let bundlePath = "htmldocs/" & projectName() & ".nim"
+    exec("./importbuilder --build src " & bundlePath)
+    exec("nim doc --project --index:on --outdir:htmldocs " & bundlePath)
