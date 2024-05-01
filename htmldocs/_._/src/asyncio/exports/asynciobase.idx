@@ -1,0 +1,14 @@
+nimTitle	asynciobase	_._/src/asyncio/exports/asynciobase.html	module src/asyncio/exports/asynciobase		0
+nim	AsyncIoBase	_._/src/asyncio/exports/asynciobase.html#AsyncIoBase	type AsyncIoBase		6
+nim	read	_._/src/asyncio/exports/asynciobase.html#read,AsyncIoBase,Natural,Future[void]	proc read(self: AsyncIoBase; count: Natural; cancelFut: Future[void] = nil): Future[\n    string]		27
+nim	readAvailable	_._/src/asyncio/exports/asynciobase.html#readAvailable,AsyncIoBase,Natural,Future[void]	proc readAvailable(self: AsyncIoBase; count: Natural; cancelFut: Future[void] = nil): Future[\n    string]		28
+nim	readChunk	_._/src/asyncio/exports/asynciobase.html#readChunk,AsyncIoBase,Future[void]	proc readChunk(self: AsyncIoBase; cancelFut: Future[void] = nil): Future[string]		29
+nim	readLine	_._/src/asyncio/exports/asynciobase.html#readLine,AsyncIoBase,Future[void]	proc readLine(self: AsyncIoBase; keepNewLine = false; cancelFut: Future[void] = nil): Future[\n    string]		30
+nim	readAll	_._/src/asyncio/exports/asynciobase.html#readAll,AsyncIoBase,Future[void]	proc readAll(self: AsyncIoBase; cancelFut: Future[void] = nil): Future[string]		31
+nim	write	_._/src/asyncio/exports/asynciobase.html#write,AsyncIoBase,string,Future[void]	proc write(self: AsyncIoBase; data: string; cancelFut: Future[void] = nil): Future[\n    int]		32
+nim	writeDiscard	_._/src/asyncio/exports/asynciobase.html#writeDiscard,AsyncIoBase,string,Future[void]	proc writeDiscard(self: AsyncIoBase; data: string; cancelFut: Future[void] = nil): Future[\n    void]		33
+nim	transfer	_._/src/asyncio/exports/asynciobase.html#transfer,AsyncIoBase,AsyncIoBase,Future[void]	proc transfer(src, dest: AsyncIoBase; cancelFut: Future[void] = nil;\n         flushAndCloseAfter = false): Future[void]		34
+nim	cancelAll	_._/src/asyncio/exports/asynciobase.html#cancelAll,AsyncIoBase	proc cancelAll(self: AsyncIoBase)		35
+nim	clear	_._/src/asyncio/exports/asynciobase.html#clear,AsyncIoBase	proc clear(self: AsyncIoBase): Future[void]		36
+nim	close	_._/src/asyncio/exports/asynciobase.html#close.e,AsyncIoBase	method close(self: AsyncIoBase)		44
+nim	isClosed	_._/src/asyncio/exports/asynciobase.html#isClosed,AsyncIoBase	proc isClosed(self: AsyncIoBase): bool		48

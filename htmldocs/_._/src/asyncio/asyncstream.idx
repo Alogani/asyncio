@@ -1,0 +1,14 @@
+nimTitle	asyncstream	_._/src/asyncio/asyncstream.html	module src/asyncio/asyncstream		0
+nim	AsyncStream	_._/src/asyncio/asyncstream.html#AsyncStream	type AsyncStream		8
+nim	AsyncStreamReader	_._/src/asyncio/asyncstream.html#AsyncStreamReader	type AsyncStreamReader		14
+nim	AsyncStreamWriter	_._/src/asyncio/asyncstream.html#AsyncStreamWriter	type AsyncStreamWriter		20
+nim	new	_._/src/asyncio/asyncstream.html#new,typeAsyncStream	proc new(T: type AsyncStream): T:type		34
+nim	reader	_._/src/asyncio/asyncstream.html#reader,AsyncStream	proc reader(self: AsyncStream): AsyncStreamReader		45
+nim	writer	_._/src/asyncio/asyncstream.html#writer,AsyncStream	proc writer(self: AsyncStream): AsyncStreamWriter		46
+nim	bufLen	_._/src/asyncio/asyncstream.html#bufLen,AsyncStream	proc bufLen(self: AsyncStream): int		47
+nim	bufLen	_._/src/asyncio/asyncstream.html#bufLen,AsyncStreamReader	proc bufLen(self: AsyncStreamReader): int		48
+nim	bufLen	_._/src/asyncio/asyncstream.html#bufLen,AsyncStreamWriter	proc bufLen(self: AsyncStreamWriter): int		49
+nim	close	_._/src/asyncio/asyncstream.html#close.e,AsyncStreamReader	method close(self: AsyncStreamReader)		79
+nim	close	_._/src/asyncio/asyncstream.html#close.e,AsyncStreamWriter	method close(self: AsyncStreamWriter)		84
+nimgrp	buflen	_._/src/asyncio/asyncstream.html#bufLen-procs-all	proc		47
+nimgrp	close	_._/src/asyncio/asyncstream.html#close-methods-all	method		79

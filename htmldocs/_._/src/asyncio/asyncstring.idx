@@ -1,0 +1,3 @@
+nimTitle	asyncstring	_._/src/asyncio/asyncstring.html	module src/asyncio/asyncstring		0
+nim	AsyncString	_._/src/asyncio/asyncstring.html#AsyncString	type AsyncString		5
+nim	new	_._/src/asyncio/asyncstring.html#new,typeAsyncString,varargs[string]	proc new(T: type AsyncString; data: varargs[string]): T:type		9

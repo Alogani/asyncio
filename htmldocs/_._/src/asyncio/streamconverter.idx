@@ -1,0 +1,2 @@
+nimTitle	streamconverter	_._/src/asyncio/streamconverter.html	module src/asyncio/streamconverter		0
+nim	toStream	_._/src/asyncio/streamconverter.html#toStream,AsyncIoBase	proc toStream(asyncstream: AsyncIoBase): StreamAsyncWrapper		17

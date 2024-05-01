@@ -1,0 +1,11 @@
+nimTitle	asyncfile	_._/src/asyncio/exports/asyncfile.html	module src/asyncio/exports/asyncfile		0
+nim	AsyncFile	_._/src/asyncio/exports/asyncfile.html#AsyncFile	type AsyncFile		5
+nim	new	_._/src/asyncio/exports/asyncfile.html#new,typeAsyncFile,FileHandle	proc new(T: type AsyncFile; fd: FileHandle): T:type		15
+nim	unregister	_._/src/asyncio/exports/asyncfile.html#unregister,AsyncFile	proc unregister(self: AsyncFile)		16
+nim	close	_._/src/asyncio/exports/asyncfile.html#close.e,AsyncFile	method close(self: AsyncFile)		22
+nim	new	_._/src/asyncio/exports/asyncfile.html#new,typeAsyncFile,File	proc new(T: type AsyncFile; file: File): T:type		7
+nim	new	_._/src/asyncio/exports/asyncfile.html#new,typeAsyncFile,string	proc new(T: type AsyncFile; path: string; mode = fmRead): T:type		8
+nim	stdinAsync	_._/src/asyncio/exports/asyncfile.html#stdinAsync	let stdinAsync		18
+nim	stdoutAsync	_._/src/asyncio/exports/asyncfile.html#stdoutAsync	let stdoutAsync		19
+nim	stderrAsync	_._/src/asyncio/exports/asyncfile.html#stderrAsync	let stderrAsync		20
+nimgrp	new	_._/src/asyncio/exports/asyncfile.html#new-procs-all	proc		15
