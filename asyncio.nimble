@@ -20,5 +20,5 @@ task reinstall, "Reinstalls this package":
 task buildDocs, "Build the docs":
     ## importBuilder source code: https://github.com/Alogani/shellcmd-examples/blob/main/src/importbuilder.nim
     let bundlePath = "htmldocs/" & projectName() & ".nim"
-    exec("./importbuilder --build src " & bundlePath)
+    exec("./importbuilder --build src " & bundlePath & " --discardExports")
     exec("nim doc --project --index:on --outdir:htmldocs " & bundlePath)
