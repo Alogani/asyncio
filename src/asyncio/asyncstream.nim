@@ -1,6 +1,5 @@
 import ./exports/asynciobase {.all.}
-import ./asynctwoend
-import ./private/buffer
+import ./private/[asynctwoend, buffer]
 
 import asyncsync, asyncsync/[lock, event]
 
@@ -23,6 +22,9 @@ type
         hasData: Event
         writerClosed: ref bool
 
+    AsyncString* = ref object of AsyncStream
+        ## Immutable async stream/buffer, that can only be written at instantiation and closed when read
+
 proc new(T: type AsyncStreamReader, buffer: Buffer, hasData: Event, writerClosed: ref bool): T =
     result = T(buffer: buffer, hasData: hasData, writerClosed: writerClosed)
     result.init(readLock = Lock.new(), writeLock = nil)
@@ -41,6 +43,12 @@ proc new*(T: type AsyncStream): T =
         reader = AsyncStreamReader.new(buffer, hasData, writerClosed),
         writer = AsyncStreamWriter.new(buffer, hasData, writerClosed)
     )
+
+proc new*(T: type AsyncString, data: varargs[string]): T =
+    result = cast[AsyncString](AsyncStream.new())
+    for chunk in data:
+        discard result.writeUnlocked(chunk, nil)
+    result.writer.close()
 
 proc reader*(self: AsyncStream): AsyncStreamReader = (procCall self.AsyncTwoEnd.reader()).AsyncStreamReader
 proc writer*(self: AsyncStream): AsyncStreamWriter = (procCall self.AsyncTwoEnd.writer()).AsyncStreamWriter

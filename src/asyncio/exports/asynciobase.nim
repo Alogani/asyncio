@@ -100,11 +100,11 @@ proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil, flushAndCl
         src.close()
 
 proc cancelAll*(self: AsyncIoBase) =
-    if self.cancelled.isTriggered():
+    if self.cancelled.triggered:
         # Definitly cancelled
         return
-    if (self.readlock != nil and self.readLock.isLocked) or 
-    (self.writeLock != nil and self.writeLock.isLocked):
+    if (self.readlock != nil and self.readLock.locked) or 
+    (self.writeLock != nil and self.writeLock.locked):
         self.cancelled.trigger()
         if self.readLock != nil:
             waitFor self.readLock.acquire()

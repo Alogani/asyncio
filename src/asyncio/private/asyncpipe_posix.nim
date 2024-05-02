@@ -1,7 +1,7 @@
 import ../exports/asyncfile # Don't ./asyncfile_posix, or asyncfile will be efined twice
 import std/[posix, os]
 
-import ../asynctwoend
+import ./asynctwoend
 
 type AsyncPipe* = ref object of AsyncTwoEnd
 

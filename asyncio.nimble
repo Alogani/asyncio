@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.4.0"
+version       = "0.4.1"
 author        = "alogani"
 description   = "Async files and streams tools"
 license       = "MIT"
@@ -10,7 +10,7 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 2.0.2"
-requires "asyncsync ~= 0.2.1"
+requires "asyncsync ~= 0.3.0"
 
 
 task reinstall, "Reinstalls this package":
@@ -23,8 +23,8 @@ task genDocs, "Build the docs":
     exec("./htmldocs/importbuilder --build src " & bundlePath & " --discardExports")
     exec("nim doc --project --index:on --outdir:htmldocs " & bundlePath)
 
-task pushSuite, "Tests -> genDocs -> git push":
-    exec("nimble test")
+task genDocsAndPush, "genDocs -> git push":
     genDocsTask()
-    exec("git commit htmldocs/** -m 'Update docs'")
+    exec("git add htmldocs")
+    exec("git commit -m 'Update docs'")
     exec("git push")

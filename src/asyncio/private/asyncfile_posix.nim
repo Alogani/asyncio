@@ -76,7 +76,7 @@ method close*(self: AsyncFile) =
 
 proc readSelect(self: AsyncFile): Future[void] =
     result = self.readListener.wait()
-    if not self.pollable or self.readListener.isListening():
+    if not self.pollable or self.readListener.listening:
         return
     if bool(self.cancelled):
         self.readListener.trigger()
@@ -89,7 +89,7 @@ proc readSelect(self: AsyncFile): Future[void] =
 
 proc writeSelect(self: AsyncFile): Future[void] =
     result = self.writeListener.wait()
-    if not self.pollable or self.writeListener.isListening():
+    if not self.pollable or self.writeListener.listening:
         return
     if bool(self.cancelled):
         self.writeListener.trigger()

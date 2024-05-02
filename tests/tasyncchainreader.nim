@@ -1,5 +1,5 @@
 import std/unittest
-import asyncio, asyncio/[asynchainreader, asyncstring]
+import asyncio, asyncio/[asynchainreader, asyncstream]
 
 proc main() {.async.} =
     test "AsyncChainReader with asyncstring":

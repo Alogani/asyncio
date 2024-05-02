@@ -1,5 +1,5 @@
 import std/unittest
-import asyncio, asyncio/[asynctee, asyncstream, asyncstring]
+import asyncio, asyncio/[asynctee, asyncstream]
 
 proc main() {.async.} =
     test "AsyncTeeReader":
