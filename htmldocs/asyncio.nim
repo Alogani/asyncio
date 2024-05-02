@@ -4,9 +4,7 @@ import ../src/asyncio/asynchainreader
 import ../src/asyncio/asynciodelayed
 import ../src/asyncio/asyncpipe
 import ../src/asyncio/asyncstream
-import ../src/asyncio/asyncstring
 import ../src/asyncio/asynctee
-import ../src/asyncio/asynctwoend
 import ../src/asyncio/asyncvoid
 import ../src/asyncio/exports/asyncfile
 import ../src/asyncio/exports/asynciobase

@@ -21,7 +21,7 @@
   <div class="document" id="documentId">
     <div class="container">
       <h1 class="title">Index</h1>
-      Modules: <a href="_._/src/asyncio.html">../src/asyncio</a>, <a href="_._/src/asyncio/asyncbuffer.html">../src/asyncio/asyncbuffer</a>, <a href="_._/src/asyncio/asynchainreader.html">../src/asyncio/asynchainreader</a>, <a href="_._/src/asyncio/asynciodelayed.html">../src/asyncio/asynciodelayed</a>, <a href="_._/src/asyncio/asyncpipe.html">../src/asyncio/asyncpipe</a>, <a href="_._/src/asyncio/asyncstream.html">../src/asyncio/asyncstream</a>, <a href="_._/src/asyncio/asyncstring.html">../src/asyncio/asyncstring</a>, <a href="_._/src/asyncio/asynctee.html">../src/asyncio/asynctee</a>, <a href="_._/src/asyncio/asynctwoend.html">../src/asyncio/asynctwoend</a>, <a href="_._/src/asyncio/asyncvoid.html">../src/asyncio/asyncvoid</a>, <a href="_._/src/asyncio/exports/asyncfile.html">../src/asyncio/exports/asyncfile</a>, <a href="_._/src/asyncio/exports/asynciobase.html">../src/asyncio/exports/asynciobase</a>, <a href="_._/src/asyncio/private/buffer.html">../src/asyncio/private/buffer</a>, <a href="_._/src/asyncio/streamconverter.html">../src/asyncio/streamconverter</a>, <a href="asyncio.html">asyncio</a>.<br/><p /><h2>API symbols</h2>
+      Modules: <a href="_._/src/asyncio.html">../src/asyncio</a>, <a href="_._/src/asyncio/asyncbuffer.html">../src/asyncio/asyncbuffer</a>, <a href="_._/src/asyncio/asynchainreader.html">../src/asyncio/asynchainreader</a>, <a href="_._/src/asyncio/asynciodelayed.html">../src/asyncio/asynciodelayed</a>, <a href="_._/src/asyncio/asyncpipe.html">../src/asyncio/asyncpipe</a>, <a href="_._/src/asyncio/asyncstream.html">../src/asyncio/asyncstream</a>, <a href="_._/src/asyncio/asyncstring.html">../src/asyncio/asyncstring</a>, <a href="_._/src/asyncio/asynctee.html">../src/asyncio/asynctee</a>, <a href="_._/src/asyncio/asynctwoend.html">../src/asyncio/asynctwoend</a>, <a href="_._/src/asyncio/asyncvoid.html">../src/asyncio/asyncvoid</a>, <a href="_._/src/asyncio/exports/asyncfile.html">../src/asyncio/exports/asyncfile</a>, <a href="_._/src/asyncio/exports/asynciobase.html">../src/asyncio/exports/asynciobase</a>, <a href="_._/src/asyncio/private/asynctwoend.html">../src/asyncio/private/asynctwoend</a>, <a href="_._/src/asyncio/private/buffer.html">../src/asyncio/private/buffer</a>, <a href="_._/src/asyncio/streamconverter.html">../src/asyncio/streamconverter</a>, <a href="asyncio.html">asyncio</a>.<br/><p /><h2>API symbols</h2>
 <dl><dt><a name="addReader" href="#addReader"><span>addReader:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="asynchainreader: proc addReader(self: AsyncChainReader; readers: varargs[AsyncIoBase])" href="_._/src/asyncio/asynchainreader.html#addReader%2CAsyncChainReader%2Cvarargs%5BAsyncIoBase%5D">asynchainreader: proc addReader(self: AsyncChainReader; readers: varargs[AsyncIoBase])</a></li>
@@ -64,6 +64,8 @@
           </ul></dd>
 <dt><a name="AsyncString" href="#AsyncString"><span>AsyncString:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="asyncstream: type AsyncString" href="_._/src/asyncio/asyncstream.html#AsyncString">asyncstream: type AsyncString</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="asyncstring: type AsyncString" href="_._/src/asyncio/asyncstring.html#AsyncString">asyncstring: type AsyncString</a></li>
           </ul></dd>
 <dt><a name="AsyncTeeReader" href="#AsyncTeeReader"><span>AsyncTeeReader:</span></a></dt><dd><ul class="simple">
@@ -77,6 +79,8 @@
 <dt><a name="AsyncTwoEnd" href="#AsyncTwoEnd"><span>AsyncTwoEnd:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="asynctwoend: type AsyncTwoEnd" href="_._/src/asyncio/asynctwoend.html#AsyncTwoEnd">asynctwoend: type AsyncTwoEnd</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="asynctwoend: type AsyncTwoEnd" href="_._/src/asyncio/private/asynctwoend.html#AsyncTwoEnd">asynctwoend: type AsyncTwoEnd</a></li>
           </ul></dd>
 <dt><a name="AsyncVoid" href="#AsyncVoid"><span>AsyncVoid:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -129,6 +133,8 @@
           data-doc-search-tag="asyncfile: method close(self: AsyncFile)" href="_._/src/asyncio/exports/asyncfile.html#close.e%2CAsyncFile">asyncfile: method close(self: AsyncFile)</a></li>
           <li><a class="reference external"
           data-doc-search-tag="asynciobase: method close(self: AsyncIoBase)" href="_._/src/asyncio/exports/asynciobase.html#close.e%2CAsyncIoBase">asynciobase: method close(self: AsyncIoBase)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="asynctwoend: method close(self: AsyncTwoEnd)" href="_._/src/asyncio/private/asynctwoend.html#close.e%2CAsyncTwoEnd">asynctwoend: method close(self: AsyncTwoEnd)</a></li>
           </ul></dd>
 <dt><a name="fillBuffer" href="#fillBuffer"><span>fillBuffer:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -143,6 +149,8 @@
 <dt><a name="init" href="#init"><span>init:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="asynctwoend: proc init(self: AsyncTwoEnd; reader, writer: AsyncIoBase)" href="_._/src/asyncio/asynctwoend.html#init%2CAsyncTwoEnd%2CAsyncIoBase%2CAsyncIoBase">asynctwoend: proc init(self: AsyncTwoEnd; reader, writer: AsyncIoBase)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="asynctwoend: proc init(self: AsyncTwoEnd; reader, writer: AsyncIoBase)" href="_._/src/asyncio/private/asynctwoend.html#init%2CAsyncTwoEnd%2CAsyncIoBase%2CAsyncIoBase">asynctwoend: proc init(self: AsyncTwoEnd; reader, writer: AsyncIoBase)</a></li>
           </ul></dd>
 <dt><a name="isClosed" href="#isClosed"><span>isClosed:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -169,6 +177,8 @@
           data-doc-search-tag="asyncpipe: proc new(T: type AsyncPipe): T:type" href="_._/src/asyncio/asyncpipe.html#new%2CtypeAsyncPipe">asyncpipe: proc new(T: type AsyncPipe): T:type</a></li>
           <li><a class="reference external"
           data-doc-search-tag="asyncstream: proc new(T: type AsyncStream): T:type" href="_._/src/asyncio/asyncstream.html#new%2CtypeAsyncStream">asyncstream: proc new(T: type AsyncStream): T:type</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="asyncstream: proc new(T: type AsyncString; data: varargs[string]): T:type" href="_._/src/asyncio/asyncstream.html#new%2CtypeAsyncString%2Cvarargs%5Bstring%5D">asyncstream: proc new(T: type AsyncString; data: varargs[string]): T:type</a></li>
           <li><a class="reference external"
           data-doc-search-tag="asyncstring: proc new(T: type AsyncString; data: varargs[string]): T:type" href="_._/src/asyncio/asyncstring.html#new%2CtypeAsyncString%2Cvarargs%5Bstring%5D">asyncstring: proc new(T: type AsyncString; data: varargs[string]): T:type</a></li>
           <li><a class="reference external"
@@ -219,6 +229,8 @@
           data-doc-search-tag="asyncstream: proc reader(self: AsyncStream): AsyncStreamReader" href="_._/src/asyncio/asyncstream.html#reader%2CAsyncStream">asyncstream: proc reader(self: AsyncStream): AsyncStreamReader</a></li>
           <li><a class="reference external"
           data-doc-search-tag="asynctwoend: proc reader(self: AsyncTwoEnd): AsyncIoBase" href="_._/src/asyncio/asynctwoend.html#reader%2CAsyncTwoEnd">asynctwoend: proc reader(self: AsyncTwoEnd): AsyncIoBase</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="asynctwoend: proc reader(self: AsyncTwoEnd): AsyncIoBase" href="_._/src/asyncio/private/asynctwoend.html#reader%2CAsyncTwoEnd">asynctwoend: proc reader(self: AsyncTwoEnd): AsyncIoBase</a></li>
           </ul></dd>
 <dt><a name="readLine" href="#readLine"><span>readLine:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -275,12 +287,14 @@
           data-doc-search-tag="asyncstream: proc writer(self: AsyncStream): AsyncStreamWriter" href="_._/src/asyncio/asyncstream.html#writer%2CAsyncStream">asyncstream: proc writer(self: AsyncStream): AsyncStreamWriter</a></li>
           <li><a class="reference external"
           data-doc-search-tag="asynctwoend: proc writer(self: AsyncTwoEnd): AsyncIoBase" href="_._/src/asyncio/asynctwoend.html#writer%2CAsyncTwoEnd">asynctwoend: proc writer(self: AsyncTwoEnd): AsyncIoBase</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="asynctwoend: proc writer(self: AsyncTwoEnd): AsyncIoBase" href="_._/src/asyncio/private/asynctwoend.html#writer%2CAsyncTwoEnd">asynctwoend: proc writer(self: AsyncTwoEnd): AsyncIoBase</a></li>
           </ul></dd>
 </dl>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-01 10:54:03 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-02 18:24:44 UTC</small>
       </div>
     </div>
   </div>
