@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.4.1"
+version       = "0.5.0"
 author        = "alogani"
 description   = "Async files and streams tools"
 license       = "MIT"
@@ -14,14 +14,16 @@ requires "asyncsync ~= 0.3.0"
 
 
 task reinstall, "Reinstalls this package":
-    exec("nimble remove " & projectName())
+    var path = "~/.nimble/pkgs2/" & projectName() & "-*"
+    exec("rm -rf " & path)
     exec("nimble install")
 
 task genDocs, "Build the docs":
     ## importBuilder source code: https://github.com/Alogani/shellcmd-examples/blob/main/src/importbuilder.nim
+    let githubUrl = "https://github.com/Alogani/asyncio"
     let bundlePath = "htmldocs/" & projectName() & ".nim"
     exec("./htmldocs/importbuilder --build src " & bundlePath & " --discardExports")
-    exec("nim doc --project --index:on --outdir:htmldocs " & bundlePath)
+    exec("nim doc --git.url:" & githubUrl & " --git.commit:v" & $version & " --project --index:on --outdir:htmldocs " & bundlePath)
 
 task genDocsAndPush, "genDocs -> git push":
     genDocsTask()

@@ -2,4 +2,3 @@ nimTitle	asynchainreader	_._/src/asyncio/asynchainreader.html	module src/asyncio
 nim	AsyncChainReader	_._/src/asyncio/asynchainreader.html#AsyncChainReader	type AsyncChainReader		7
 nim	new	_._/src/asyncio/asynchainreader.html#new,typeAsyncChainReader,varargs[AsyncIoBase]	proc new(T: type AsyncChainReader; readers: varargs[AsyncIoBase]): T:type		12
 nim	addReader	_._/src/asyncio/asynchainreader.html#addReader,AsyncChainReader,varargs[AsyncIoBase]	proc addReader(self: AsyncChainReader; readers: varargs[AsyncIoBase])		19
-nim	close	_._/src/asyncio/asynchainreader.html#close.e,AsyncChainReader	method close(self: AsyncChainReader)		48

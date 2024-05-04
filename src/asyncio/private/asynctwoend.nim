@@ -29,7 +29,7 @@ method writeUnlocked(self: AsyncTwoEnd, data: string, cancelFut: Future[void]): 
     return self.writer.writeUnlocked(data, cancelFut)
 
 method close*(self: AsyncTwoEnd) =
-    self.isClosed = true
+    self.closed = true
     self.reader.close()
     self.writer.close()
     self.cancelled.trigger()

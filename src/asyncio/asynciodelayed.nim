@@ -25,7 +25,7 @@ method writeUnlocked(self: AsyncIoDelayed, data: string, cancelFut: Future[void]
     await sleepAsync(self.delayMs)
     return await self.stream.writeUnlocked(data, cancelFut)
 
-method close*(self: AsyncIoDelayed) =
+method close(self: AsyncIoDelayed) =
     self.cancelled.trigger()
-    self.isClosed = true
+    self.closed = true
     self.stream.close()

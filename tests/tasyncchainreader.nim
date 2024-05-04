@@ -8,6 +8,6 @@ proc main() {.async.} =
             AsyncString.new("d", "e", "f")
         )
         check (await stream.readAll()) == "abcdef"
-        check stream.isClosed
+        check stream.closed
 
 waitFor main()

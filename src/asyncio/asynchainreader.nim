@@ -17,8 +17,8 @@ proc new*(T: type AsyncChainReader, readers: varargs[AsyncIoBase]): T =
     result.init(readLock = allReaderLocks.merge(), writeLock = nil)
 
 proc addReader*(self: AsyncChainReader, readers: varargs[AsyncIoBase]) =
-    if self.isClosed:
-        self.isClosed = false
+    if self.closed:
+        self.closed = false
         self.cancelled.clear()
     for r in readers:
         self.readers.addLast r
@@ -45,8 +45,8 @@ method readChunkUnlocked(self: AsyncChainReader, cancelFut: Future[void]): Futur
         if result == "":
             discard self.readers.popFirst()
 
-method close*(self: AsyncChainReader) =
+method close(self: AsyncChainReader) =
     self.cancelled.trigger()
-    self.isClosed = true
+    self.closed = true
     for stream in self.readers:
         stream.close()

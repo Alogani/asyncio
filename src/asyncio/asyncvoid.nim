@@ -16,10 +16,10 @@ proc new*(T: type AsyncVoid): T =
 
 method writeUnlocked(self: AsyncVoid, data: string, cancelFut: Future[void]): Future[int] =
     result = newFuture[int]()
-    if self.isClosed:
+    if self.closed:
         result.complete(0)
     else:
         result.complete(data.len())
 
-method close*(self: AsyncVoid) =
-    self.isClosed = true
+method close(self: AsyncVoid) =
+    self.closed = true

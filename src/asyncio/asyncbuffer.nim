@@ -73,7 +73,7 @@ method writeUnlocked(self: AsyncBuffer, data: string, cancelFut: Future[void]): 
     else:
         return dataLen
 
-method close*(self: AsyncBuffer) =
+method close(self: AsyncBuffer) =
     self.cancelled.trigger()
-    self.isClosed = true
+    self.closed = true
     self.stream.close()

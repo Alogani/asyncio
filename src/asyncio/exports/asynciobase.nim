@@ -2,8 +2,11 @@ import std/[asyncdispatch]
 import asyncsync, asyncsync/[lock, event]
 export asyncsync
 
+
 type
     AsyncIoBase* = ref object of RootRef
+        ## Base type for all AsyncIo objects
+        ## Define all methods and handle locks
         isClosed: bool
         readLock: Lock
         writeLock: Lock
@@ -24,116 +27,46 @@ const
         - can propose specific public procs
 ]#
 
-proc read*(self: AsyncIoBase, count: Natural, cancelFut: Future[void] = nil): Future[string]
-proc readAvailable*(self: AsyncIoBase, count: Natural, cancelFut: Future[void] = nil): Future[string]
-proc readChunk*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[string]
-proc readLine*(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void] = nil): Future[string]
-proc readAll*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[string]
-proc write*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[int]
-proc writeDiscard*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[void]
-proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil, flushAndCloseAfter = false): Future[void]
-proc cancelAll*(self: AsyncIoBase)
-proc clear*(self: AsyncIoBase): Future[void]
-{.push base.} # Implementation details
-method readUnlocked(self: AsyncIoBase, count: int, cancelFut: Future[void]): Future[string]
-method readAvailableUnlocked(self: AsyncIoBase, count: int, cancelFut: Future[void]): Future[string] = discard
-method readChunkUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string]
-method readLineUnlocked(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void]): Future[string]
-method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string]
-method writeUnlocked(self: AsyncIoBase, data: string, cancelFut: Future[void]): Future[int] = discard
-method close*(self: AsyncIoBase) {.gcsafe.} = discard
-{.pop.}
-{.push inline used.} # For children va import {.all.}
-proc init(self: AsyncIoBase, readLock: Lock, writeLock: Lock)
-proc isClosed*(self: AsyncIoBase): bool = self.isClosed
-proc `isClosed=`(self: AsyncIoBase, state: bool) = self.isClosed = state
-proc readLock(self: AsyncIoBase): Lock = self.readLock
-proc writeLock(self: AsyncIoBase): Lock = self.writeLock
-proc cancelled(self: AsyncIoBase): Event = self.cancelled
-proc `cancelled=`(self: AsyncIoBase, state: bool) = (if state: self.cancelled.trigger() else: self.cancelled.clear())
-{.pop.}
-
-
-proc read*(self: AsyncIoBase, count: Natural, cancelFut: Future[void] = nil): Future[string] {.async.} =
-    ## Await the data read len is count
-    withLock self.readLock, cancelFut:
-        result = await self.readUnlocked(count, cancelFut)
-
-proc readAvailable*(self: AsyncIoBase, count: Natural, cancelFut: Future[void] = nil): Future[string] {.async.} =
-    ## Await at least one byte is available
-    withLock self.readLock, cancelFut:
-        result = await self.readAvailableUnlocked(count, cancelFut)
-
-proc readChunk*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[string] {.async.} =
-    withLock self.readLock, cancelFut:
-        result = await self.readChunkUnlocked(cancelFut)
-
-proc readLine*(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void] = nil): Future[string] {.async.} =
-    withLock self.readLock, cancelFut:
-        result = await self.readLineUnlocked(keepNewLine, cancelFut)
-
-proc readAll*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[string] {.async.} =
-    withLock self.readLock, cancelFut:
-        result = await self.readAllUnlocked(cancelFut)
-
-proc write*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[int] {.async.} =
-    withLock self.writeLock, any(self.cancelled, cancelFut): # Is it really useful ?
-       result = await self.writeUnlocked(data, cancelFut)
-
-proc writeDiscard*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[void] =
-    cast[Future[void]](self.write(data, cancelFut))
-
-proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil, flushAndCloseAfter = false): Future[void] {.async.} =
-    ## Transfer read from src immediatly to dest
-    ## Returns a future when completed
-    ## src will be cleared and closed if closeAfter is set to true
-    withLock src.readLock, cancelFut:
-        while true:
-            let data = await src.readChunkUnlocked(any(cancelFut, dest.cancelled))
-            if data == "":
-                break
-            let count = await dest.write(data, any(cancelFut, src.cancelled))
-            if count == 0:
-                break
-    if flushAndCloseAfter:
-        await src.clear()
-        src.close()
-
-proc cancelAll*(self: AsyncIoBase) =
-    if self.cancelled.triggered:
-        # Definitly cancelled
-        return
-    if (self.readlock != nil and self.readLock.locked) or 
-    (self.writeLock != nil and self.writeLock.locked):
-        self.cancelled.trigger()
-        if self.readLock != nil:
-            waitFor self.readLock.acquire()
-            self.readLock.release()
-        if self.writeLock != nil:
-            self.writeLock.release()
-            waitFor self.writeLock.acquire()
-        self.cancelled.clear()
-
-proc clear*(self: AsyncIoBase) {.async.} =
-    self.cancelAll()
-    while true:
-        if (await self.readChunk(sleepAsync(ClearWaitMS))) == "":
-            break
-
+{.push used.} # For children va import {.all.}
 proc init(self: AsyncIoBase, readLock: Lock, writeLock: Lock) =
+    ## All children must call it
     self.readLock = readLock
     self.writeLock = writeLock
     self.cancelled = Event.new()
+proc cancelled(self: AsyncIoBase): Event =
+    self.cancelled
+proc `cancelled=`(self: AsyncIoBase, state: bool) =
+    (if state: self.cancelled.trigger() else: self.cancelled.clear())
+proc closed*(self: AsyncIoBase): bool =
+    self.isClosed
+proc `closed=`(self: AsyncIoBase, state: bool) =
+    self.isClosed = state
+proc readLock(self: AsyncIoBase): Lock =
+    self.readLock
+proc writeLock(self: AsyncIoBase): Lock =
+    self.writeLock
+{.pop.}
 
-method readUnlocked(self: AsyncIoBase, count: int, cancelFut: Future[void]): Future[string] {.async.} =
+method close*(self: AsyncIoBase) {.gcsafe, base.} =
+    discard
+
+method readAvailableUnlocked(self: AsyncIoBase, count: int, cancelFut: Future[void]): Future[string] {.base.} =
+    discard
+
+method writeUnlocked(self: AsyncIoBase, data: string, cancelFut: Future[void]): Future[int] {.base.} =
+    discard
+
+method readUnlocked(self: AsyncIoBase, count: int, cancelFut: Future[void]): Future[string] {.async, base.} =
     while result.len() < count:
         let data = await self.readAvailableUnlocked(count - result.len(), cancelFut)
         if data == "":
             break
         result.add(data)
 
-method readLineUnlocked(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void]): Future[string] {.async.} =
-    # Unbuffered, but any ssd will be blazingly faster than buffered
+method readLineUnlocked(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void]): Future[string] {.async, base.} =
+    # Default implementation
+    # Unbuffered by default
+    # Use '\n' to search for newline
     result = newStringOfCap(BufsizeLine)
     while true:
         let data = (await self.readAvailableUnlocked(1, cancelFut))
@@ -145,12 +78,102 @@ method readLineUnlocked(self: AsyncIoBase, keepNewLine = false, cancelFut: Futur
             break
         result.add(data)
 
-method readChunkUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string] =
+method readChunkUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string] {.base.} =
     self.readAvailableUnlocked(ChunkSize, cancelFut)
 
-method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string] {.async.} =
+method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string] {.async, base.} =
     while true:
         let data = await self.readChunkUnlocked(cancelFut)
         if data == "":
             break
         result.add(data)
+
+proc read*(self: AsyncIoBase, count: Natural, cancelFut: Future[void] = nil): Future[string] {.async.} =
+    ## Await the data read len is count
+    ## 
+    ## If cancelled was triggered, no attempt to read data is made and an empty string is returned.
+    ## If cancelled is triggered during read, all available read data is returned (can be an empty string)
+    withLock self.readLock, cancelFut:
+        result = await self.readUnlocked(count, cancelFut)
+
+proc readAvailable*(self: AsyncIoBase, count: Natural, cancelFut: Future[void] = nil): Future[string] {.async.} =
+    ## Await at least one byte is available. So read can be from 1 byte to `count`
+    ## 
+    ## If cancelled is triggered during read, an empty string is returned
+    withLock self.readLock, cancelFut:
+        result = await self.readAvailableUnlocked(count, cancelFut)
+
+proc readChunk*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[string] {.async.} =
+    ## Await at least one byte is available. Try to read a big chunk of data to optimize speed
+    ## 
+    ## The exact size is implementation specific and can vary between objects
+    withLock self.readLock, cancelFut:
+        result = await self.readChunkUnlocked(cancelFut)
+
+proc readLine*(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void] = nil): Future[string] {.async.} =
+    ## Attempt to read up to a newline or to the end of stream
+    ## 
+    ## newline can be kept if `keepNewLine` is set to true, which can be used to distinguish when end of stream is reached
+    withLock self.readLock, cancelFut:
+        result = await self.readLineUnlocked(keepNewLine, cancelFut)
+
+proc readAll*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[string] {.async.} =
+    withLock self.readLock, cancelFut:
+        result = await self.readAllUnlocked(cancelFut)
+
+proc write*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[int] {.async.} =
+    ## Await write is available and write to it
+    ## 
+    ## Number of bytes written is returned and can be inferior to `data.len()`
+    withLock self.writeLock, any(self.cancelled, cancelFut):
+       result = await self.writeUnlocked(data, cancelFut)
+
+proc writeDiscard*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[void] =
+    ## Await write is available and write to it
+    ## 
+    ## Number of bytes can be inferior to `data.len()`
+    cast[Future[void]](self.write(data, cancelFut))
+
+
+proc cancelAll*(self: AsyncIoBase) =
+    ## Kick out all pending readers and writers
+    ## 
+    ## The consequence for readers and writers are the same as if they would have used `read(..., cancelFut)` or `write(..., cancelFut)`
+    if self.cancelled.triggered and self.isClosed:
+        return
+    if (self.readlock != nil and self.readLock.locked) or 
+    (self.writeLock != nil and self.writeLock.locked):
+        self.cancelled.trigger()
+        if self.readLock != nil:
+            waitFor self.readLock.acquire()
+            self.readLock.release()
+        if self.writeLock != nil:
+            self.writeLock.release()
+            waitFor self.writeLock.acquire()
+        if not self.isClosed:
+            self.cancelled.clear()
+
+proc clear*(self: AsyncIoBase, cancelFut = sleepAsync(ClearWaitMS)) {.async.} =
+    ## Execute cancelAll, then read all available data
+    ## By default, use a minimal timer to know when data is fully read
+    self.cancelAll()
+    while true:
+        if await(self.readChunk(cancelFut)) == "":
+            break
+
+proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil, flushAndCloseAfter = false): Future[void] {.async.} =
+    ## Transfer read from src immediatly to dest using readChunk
+    ## Returns a future when completed
+    ## If `flushAndCloseAfter` is set to true, src will be cleared then closed when transfer is over
+    withLock src.readLock, cancelFut:
+        while true:
+            let data = await src.readChunkUnlocked(any(cancelFut, dest.cancelled))
+            if data == "":
+                break
+            let count = await dest.write(data, any(cancelFut, src.cancelled))
+            if count == 0:
+                break
+    if flushAndCloseAfter:
+        await src.clear()
+        src.close()
+    

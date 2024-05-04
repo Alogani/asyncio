@@ -67,10 +67,10 @@ method writeUnlocked(self: AsyncFile, data: string, cancelFut: Future[void]): Fu
         else:
             result = bytesCount
 
-method close*(self: AsyncFile) =
-    if not self.isClosed():
+method close(self: AsyncFile) =
+    if not self.closed():
         self.cancelled.trigger()
-        self.isClosed = true
+        self.closed = true
         self.unregister()
         discard self.fd.close()
 

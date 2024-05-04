@@ -31,8 +31,8 @@ method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[
     if result != "":
         discard await self.writer.write(result, cancelFut)
 
-method close*(self: AsyncTeeReader) =
-    self.isClosed = true
+method close(self: AsyncTeeReader) =
+    self.closed = true
     self.cancelled.trigger()
     self.reader.close()
     self.writer.close()
@@ -54,8 +54,8 @@ method writeUnlocked(self: AsyncTeeWriter, data: string, cancelFut: Future[void]
     for res in (await all(allFuts)):
         result += res
 
-method close*(self: AsyncTeeWriter) =
+method close(self: AsyncTeeWriter) =
     self.cancelled.trigger()
-    self.isClosed = true
+    self.closed = true
     for w in self.writers:
         w.close()

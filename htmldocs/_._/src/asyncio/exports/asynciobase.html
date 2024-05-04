@@ -65,11 +65,11 @@
 
 </ul>
 <ul class="simple nested-toc-section">clear
-  <li><a class="reference" href="#clear%2CAsyncIoBase" title="clear(self: AsyncIoBase): Future[void]">clear(self: AsyncIoBase): Future[void]</a></li>
+  <li><a class="reference" href="#clear%2CAsyncIoBase" title="clear(self: AsyncIoBase; cancelFut = sleepAsync(5)): owned(Future[void])">clear(self: AsyncIoBase; cancelFut = sleepAsync(5)): owned(Future[void])</a></li>
 
 </ul>
-<ul class="simple nested-toc-section">isClosed
-  <li><a class="reference" href="#isClosed%2CAsyncIoBase" title="isClosed(self: AsyncIoBase): bool">isClosed(self: AsyncIoBase): bool</a></li>
+<ul class="simple nested-toc-section">closed
+  <li><a class="reference" href="#closed%2CAsyncIoBase" title="closed(self: AsyncIoBase): bool">closed(self: AsyncIoBase): bool</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">read
@@ -137,7 +137,9 @@
 
   </div>
   <div class="nine columns" id="content">
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L1" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L1" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
     <div id="tocRoot"></div>
     
     <p class="module-desc"></p>
@@ -149,8 +151,10 @@
   </pre></dt>
   <dd>
     
-    
-    
+    Base type for all AsyncIo objects Define all methods and handle locks
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L7" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L7" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -165,32 +169,38 @@
                                     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
-    
+    Kick out all pending readers and writers The consequence for readers and writers are the same as if they would have used <tt class="docutils literal"><span class="pre"><span class="Identifier">read</span><span class="Punctuation">(</span><span class="Operator">...</span><span class="Punctuation">,</span> <span class="Identifier">cancelFut</span><span class="Punctuation">)</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">write</span><span class="Punctuation">(</span><span class="Operator">...</span><span class="Punctuation">,</span> <span class="Identifier">cancelFut</span><span class="Punctuation">)</span></span></tt>
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L130" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L130" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
 </div>
 <div id="clear-procs-all">
   <div id="clear,AsyncIoBase">
-  <dt><pre><span class="Keyword">proc</span> <a href="#clear%2CAsyncIoBase"><span class="Identifier">clear</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#clear%2CAsyncIoBase"><span class="Identifier">clear</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">cancelFut</span> <span class="Other">=</span> <span class="Identifier">sleepAsync</span><span class="Other">(</span><span class="DecNumber">5</span><span class="Other">)</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">owned</span><span class="Other">(</span><span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
-    
+    Execute cancelAll, then read all available data By default, use a minimal timer to know when data is fully read
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L147" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L147" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
 </div>
-<div id="isClosed-procs-all">
-  <div id="isClosed,AsyncIoBase">
-  <dt><pre><span class="Keyword">proc</span> <a href="#isClosed%2CAsyncIoBase"><span class="Identifier">isClosed</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">used</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<div id="closed-procs-all">
+  <div id="closed,AsyncIoBase">
+  <dt><pre><span class="Keyword">proc</span> <a href="#closed%2CAsyncIoBase"><span class="Identifier">closed</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span class="Identifier">used</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L40" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L40" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -198,11 +208,14 @@
 <div id="read-procs-all">
   <div id="read,AsyncIoBase,Natural,Future[void]">
   <dt><pre><span class="Keyword">proc</span> <a href="#read%2CAsyncIoBase%2CNatural%2CFuture%5Bvoid%5D"><span class="Identifier">read</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">count</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">;</span> <span class="Identifier">cancelFut</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span>
-    <span class="Identifier">string</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">string</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
+              <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
-    
+    Await the data read len is count If cancelled was triggered, no attempt to read data is made and an empty string is returned If cancelled is triggered during read, all available read data is returned (can be an empty string)
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L89" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L89" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -210,11 +223,14 @@
 <div id="readAll-procs-all">
   <div id="readAll,AsyncIoBase,Future[void]">
   <dt><pre><span class="Keyword">proc</span> <a href="#readAll%2CAsyncIoBase%2CFuture%5Bvoid%5D"><span class="Identifier">readAll</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">cancelFut</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L114" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L114" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -223,11 +239,14 @@
   <div id="readAvailable,AsyncIoBase,Natural,Future[void]">
   <dt><pre><span class="Keyword">proc</span> <a href="#readAvailable%2CAsyncIoBase%2CNatural%2CFuture%5Bvoid%5D"><span class="Identifier">readAvailable</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">count</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">;</span>
                    <span class="Identifier">cancelFut</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
-    
+    Await at least one byte is available. So read can be from 1 byte to <tt class="docutils literal"><span class="pre"><span class="Identifier">count</span></span></tt> If cancelled is triggered during read, an empty string is returned
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L96" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L96" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -235,11 +254,14 @@
 <div id="readChunk-procs-all">
   <div id="readChunk,AsyncIoBase,Future[void]">
   <dt><pre><span class="Keyword">proc</span> <a href="#readChunk%2CAsyncIoBase%2CFuture%5Bvoid%5D"><span class="Identifier">readChunk</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">cancelFut</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
-    
+    Await at least one byte is available. Try to read a big chunk of data to optimize speed The exact size is implementation specific and can vary between objects
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L102" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L102" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -248,11 +270,14 @@
   <div id="readLine,AsyncIoBase,Future[void]">
   <dt><pre><span class="Keyword">proc</span> <a href="#readLine%2CAsyncIoBase%2CFuture%5Bvoid%5D"><span class="Identifier">readLine</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">keepNewLine</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">;</span>
               <span class="Identifier">cancelFut</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
-    
+    Attempt to read up to a newline newline can be kept if <tt class="docutils literal"><span class="pre"><span class="Identifier">keepNewLine</span></span></tt> is set to true
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L108" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L108" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -260,12 +285,14 @@
 <div id="transfer-procs-all">
   <div id="transfer,AsyncIoBase,AsyncIoBase,Future[void]">
   <dt><pre><span class="Keyword">proc</span> <a href="#transfer%2CAsyncIoBase%2CAsyncIoBase%2CFuture%5Bvoid%5D"><span class="Identifier">transfer</span></a><span class="Other">(</span><span class="Identifier">src</span><span class="Other">,</span> <span class="Identifier">dest</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">cancelFut</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">;</span>
-              <span class="Identifier">flushAndCloseAfter</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+              <span class="Identifier">flushAndCloseAfter</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
-    
+    Transfer read from src immediatly to dest using readChunk Returns a future when completed If <a class="reference internal" href="#flushAndCloseAfter">flushAndCloseAfter</a> is set to true, src will be cleared then closed when transfer is over
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L155" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L155" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -273,11 +300,14 @@
 <div id="write-procs-all">
   <div id="write,AsyncIoBase,string,Future[void]">
   <dt><pre><span class="Keyword">proc</span> <a href="#write%2CAsyncIoBase%2Cstring%2CFuture%5Bvoid%5D"><span class="Identifier">write</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">cancelFut</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span>
-    <span class="Identifier">int</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span class="Identifier">int</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
+           <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
-    
+    Await write is available and write to it Number of bytes written is returned and can be inferior to <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span><span class="Operator">.</span><span class="Identifier">len</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt>
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L118" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L118" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -288,8 +318,10 @@
     <span class="Identifier">void</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
-    
+    Await write is available and write to it Number of bytes can be inferior to <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span><span class="Operator">.</span><span class="Identifier">len</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt>
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L124" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L124" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -307,7 +339,9 @@
   <dd>
     
     
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L50" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L50" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -322,7 +356,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-02 18:24:44 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-04 07:52:11 UTC</small>
       </div>
     </div>
   </div>

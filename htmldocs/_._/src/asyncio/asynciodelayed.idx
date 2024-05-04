@@ -1,4 +1,3 @@
 nimTitle	asynciodelayed	_._/src/asyncio/asynciodelayed.html	module src/asyncio/asynciodelayed		0
 nim	AsyncIoDelayed	_._/src/asyncio/asynciodelayed.html#AsyncIoDelayed	type AsyncIoDelayed		5
 nim	new	_._/src/asyncio/asynciodelayed.html#new,typeAsyncIoDelayed,AsyncIoBase,float	proc new(T: type AsyncIoDelayed; stream: AsyncIoBase; delayMs: float): T:type		11
-nim	close	_._/src/asyncio/asynciodelayed.html#close.e,AsyncIoDelayed	method close(self: AsyncIoDelayed)		28

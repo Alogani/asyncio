@@ -57,7 +57,7 @@
       <li><a class="reference" href="#AsyncStream" title="AsyncStream = ref object of AsyncTwoEnd">AsyncStream</a></li>
 <li><a class="reference" href="#AsyncStreamReader" title="AsyncStreamReader = ref object of AsyncIoBase">AsyncStreamReader</a></li>
 <li><a class="reference" href="#AsyncStreamWriter" title="AsyncStreamWriter = ref object of AsyncIoBase">AsyncStreamWriter</a></li>
-<li><a class="reference" href="#AsyncString" title="AsyncString = ref object of AsyncStream">AsyncString</a></li>
+<li><a class="reference" href="#AsyncString" title="AsyncString = ref object of AsyncStreamReader">AsyncString</a></li>
 
     </ul>
   </details>
@@ -74,7 +74,7 @@
 </ul>
 <ul class="simple nested-toc-section">new
   <li><a class="reference" href="#new%2CtypeAsyncStream" title="new(T: type AsyncStream): T:type">new(T: type AsyncStream): T:type</a></li>
-<li><a class="reference" href="#new%2CtypeAsyncString%2Cvarargs%5Bstring%5D" title="new(T: type AsyncString; data: varargs[string]): T:type">new(T: type AsyncString; data: varargs[string]): T:type</a></li>
+<li><a class="reference" href="#new%2CtypeAsyncString%2Cvarargs%5Bstring%5D" title="new(T: type AsyncString; data: varargs[string]): AsyncString">new(T: type AsyncString; data: varargs[string]): AsyncString</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">reader
@@ -89,25 +89,14 @@
     </ul>
   </details>
 </li>
-<li>
-  <details open>
-    <summary><a class="reference reference-toplevel" href="#14" id="64">Methods</a></summary>
-    <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">close
-  <li><a class="reference" href="#close.e%2CAsyncStreamReader" title="close(self: AsyncStreamReader)">close(self: AsyncStreamReader)</a></li>
-<li><a class="reference" href="#close.e%2CAsyncStreamWriter" title="close(self: AsyncStreamWriter)">close(self: AsyncStreamWriter)</a></li>
-
-</ul>
-
-    </ul>
-  </details>
-</li>
 
 </ul>
 
   </div>
   <div class="nine columns" id="content">
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L1" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L1" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
     <div id="tocRoot"></div>
     
     <p class="module-desc"></p>
@@ -126,7 +115,9 @@
   <dd>
     
     An in-memory async buffer Because it is async (read pending for data), it can be highly subjects to deadlocks To avoid deadlocks: ensure to a least close writer when finished Not thread safe
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L7" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L7" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 <div id="AsyncStreamReader">
@@ -135,7 +126,9 @@
   <dd>
     
     Can't be instantiated directly
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L13" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L13" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 <div id="AsyncStreamWriter">
@@ -144,16 +137,20 @@
   <dd>
     
     Can't be instantiated directly
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L19" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L19" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 <div id="AsyncString">
-  <dt><pre><a href="asyncstream.html#AsyncString"><span class="Identifier">AsyncString</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="asyncstream.html#AsyncStream"><span class="Identifier">AsyncStream</span></a>
+  <dt><pre><a href="asyncstream.html#AsyncString"><span class="Identifier">AsyncString</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="asyncstream.html#AsyncStreamReader"><span class="Identifier">AsyncStreamReader</span></a>
   </pre></dt>
   <dd>
     
-    Immutable async stream/buffer, that can only be written at instantiation and closed when read
-    
+    Immutable async stream/buffer, that can only be written at instantiation
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L25" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L25" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -168,7 +165,9 @@
   <dd>
     
     
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L56" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L56" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 <div id="bufLen,AsyncStreamReader">
@@ -176,7 +175,9 @@
   <dd>
     
     
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L57" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L57" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 <div id="bufLen,AsyncStreamWriter">
@@ -184,7 +185,9 @@
   <dd>
     
     
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L58" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L58" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -195,15 +198,19 @@
   <dd>
     
     
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L36" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L36" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 <div id="new,typeAsyncString,varargs[string]">
-  <dt><pre><span class="Keyword">proc</span> <a href="#new%2CtypeAsyncString%2Cvarargs%5Bstring%5D"><span class="Identifier">new</span></a><span class="Other">(</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">type</span> <span class="Identifier">AsyncString</span><span class="Other">;</span> <span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">varargs</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T:type</span></pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#new%2CtypeAsyncString%2Cvarargs%5Bstring%5D"><span class="Identifier">new</span></a><span class="Other">(</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">type</span> <span class="Identifier">AsyncString</span><span class="Other">;</span> <span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">varargs</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="asyncstream.html#AsyncString"><span class="Identifier">AsyncString</span></a></pre></dt>
   <dd>
     
     
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L47" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L47" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -215,7 +222,9 @@
   <dd>
     
     
-    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L54" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L54" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
   </dd>
 </div>
 
@@ -227,34 +236,9 @@
   <dd>
     
     
-    
-  </dd>
-</div>
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/asyncstream.nim#L55" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/asyncstream.nim#L55" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
-</div>
-
-  </dl>
-</div>
-<div class="section" id="14">
-  <h1><a class="toc-backref" href="#14">Methods</a></h1>
-  <dl class="item">
-    <div id="close-methods-all">
-  <div id="close.e,AsyncStreamReader">
-  <dt><pre><span class="Keyword">method</span> <a href="#close.e%2CAsyncStreamReader"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asyncstream.html#AsyncStreamReader"><span class="Identifier">AsyncStreamReader</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span>
-                                        <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-  <dd>
-    
-    
-    
-  </dd>
-</div>
-<div id="close.e,AsyncStreamWriter">
-  <dt><pre><span class="Keyword">method</span> <a href="#close.e%2CAsyncStreamWriter"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asyncstream.html#AsyncStreamWriter"><span class="Identifier">AsyncStreamWriter</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span>
-                                        <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
-  <dd>
-    
-    
-    
   </dd>
 </div>
 
@@ -269,7 +253,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-02 18:24:44 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-04 07:52:11 UTC</small>
       </div>
     </div>
   </div>

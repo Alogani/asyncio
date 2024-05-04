@@ -22,8 +22,8 @@ type
         hasData: Event
         writerClosed: ref bool
 
-    AsyncString* = ref object of AsyncStream
-        ## Immutable async stream/buffer, that can only be written at instantiation and closed when read
+    AsyncString* = ref object of AsyncStreamReader
+        ## Immutable async stream/buffer, that can only be written at instantiation
 
 proc new(T: type AsyncStreamReader, buffer: Buffer, hasData: Event, writerClosed: ref bool): T =
     result = T(buffer: buffer, hasData: hasData, writerClosed: writerClosed)
@@ -44,11 +44,12 @@ proc new*(T: type AsyncStream): T =
         writer = AsyncStreamWriter.new(buffer, hasData, writerClosed)
     )
 
-proc new*(T: type AsyncString, data: varargs[string]): T =
-    result = cast[AsyncString](AsyncStream.new())
+proc new*(T: type AsyncString, data: varargs[string]): AsyncString =
+    var stream = AsyncStream.new()
     for chunk in data:
-        discard result.writeUnlocked(chunk, nil)
-    result.writer.close()
+        discard stream.writeUnlocked(chunk, nil)
+    stream.writer.close()
+    return cast[AsyncString](stream.reader)
 
 proc reader*(self: AsyncStream): AsyncStreamReader = (procCall self.AsyncTwoEnd.reader()).AsyncStreamReader
 proc writer*(self: AsyncStream): AsyncStreamWriter = (procCall self.AsyncTwoEnd.writer()).AsyncStreamWriter
@@ -58,7 +59,7 @@ proc bufLen*(self: AsyncStreamWriter): int = self.buffer.len()
 
 
 method readAvailableUnlocked(self: AsyncStreamReader, count: int, cancelFut: Future[void]): Future[string] {.async.} =
-    if self.isClosed:
+    if self.closed:
         return
     if not self.writerClosed[]:
         await any(self.hasData.wait(), cancelFut, self.cancelled)
@@ -67,7 +68,7 @@ method readAvailableUnlocked(self: AsyncStreamReader, count: int, cancelFut: Fut
         self.hasData.clear()
 
 method readChunkUnlocked(self: AsyncStreamReader, cancelFut: Future[void]): Future[string] {.async.} =
-    if self.isClosed:
+    if self.closed:
         return
     if not self.writerClosed[]:
         await any(self.hasData.wait(), cancelFut, self.cancelled)
@@ -78,19 +79,19 @@ method readChunkUnlocked(self: AsyncStreamReader, cancelFut: Future[void]): Futu
         result = self.buffer.readChunk()
 
 method writeUnlocked(self: AsyncStreamWriter, data: string, cancelFut: Future[void]): Future[int] {.async.} =
-    if self.isClosed or self.writerClosed[]:
+    if self.closed or self.writerClosed[]:
         return 0
     self.hasData.trigger()
     self.buffer.write(data)
     return data.len()
 
-method close*(self: AsyncStreamReader) =
+method close(self: AsyncStreamReader) =
     self.buffer.clear()
-    self.isClosed = true
+    self.closed = true
     self.cancelled.trigger()
 
-method close*(self: AsyncStreamWriter) =
-    self.isClosed = true
+method close(self: AsyncStreamWriter) =
+    self.closed = true
     self.cancelled.trigger()
     self.hasData.trigger()
     self.writerClosed[] = true
