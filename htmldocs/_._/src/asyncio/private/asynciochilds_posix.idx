@@ -1,0 +1,14 @@
+nimTitle	asynciochilds_posix	_._/src/asyncio/private/asynciochilds_posix.html	module src/asyncio/private/asynciochilds_posix		0
+nim	AsyncFile	_._/src/asyncio/private/asynciochilds_posix.html#AsyncFile	type AsyncFile		8
+nim	AsyncPipe	_._/src/asyncio/private/asynciochilds_posix.html#AsyncPipe	type AsyncPipe		17
+nim	new	_._/src/asyncio/private/asynciochilds_posix.html#new,typeAsyncFile,FileHandle	proc new(T: type AsyncFile; fd: FileHandle): T:type		19
+nim	stdinAsync	_._/src/asyncio/private/asynciochilds_posix.html#stdinAsync	let stdinAsync		21
+nim	stdoutAsync	_._/src/asyncio/private/asynciochilds_posix.html#stdoutAsync	let stdoutAsync		22
+nim	stderrAsync	_._/src/asyncio/private/asynciochilds_posix.html#stderrAsync	let stderrAsync		23
+nim	new	_._/src/asyncio/private/asynciochilds_posix.html#new,typeAsyncFile,File	proc new(T: type AsyncFile; file: File): T:type		43
+nim	new	_._/src/asyncio/private/asynciochilds_posix.html#new,typeAsyncFile,string	proc new(T: type AsyncFile; path: string; mode = fmRead): T:type		46
+nim	new	_._/src/asyncio/private/asynciochilds_posix.html#new,typeAsyncPipe	proc new(T: type AsyncPipe): T:type		49
+nim	reader	_._/src/asyncio/private/asynciochilds_posix.html#reader,AsyncPipe	proc reader(self: AsyncPipe): AsyncFile		72
+nim	unregister	_._/src/asyncio/private/asynciochilds_posix.html#unregister,AsyncFile	proc unregister(self: AsyncFile)		89
+nim	writer	_._/src/asyncio/private/asynciochilds_posix.html#writer,AsyncPipe	proc writer(self: AsyncPipe): AsyncFile		125
+nimgrp	new	_._/src/asyncio/private/asynciochilds_posix.html#new-procs-all	proc		19

@@ -1,0 +1,31 @@
+nimTitle	asynciochilds	_._/src/asyncio/exports/asynciochilds.html	module src/asyncio/exports/asynciochilds		0
+nim	defaultAsyncBufferSize	_._/src/asyncio/exports/asynciochilds.html#defaultAsyncBufferSize	const defaultAsyncBufferSize		16
+nim	AsyncBuffer	_._/src/asyncio/exports/asynciochilds.html#AsyncBuffer	type AsyncBuffer		19
+nim	AsyncChainReader	_._/src/asyncio/exports/asynciochilds.html#AsyncChainReader	type AsyncChainReader		28
+nim	AsyncIoDelayed	_._/src/asyncio/exports/asynciochilds.html#AsyncIoDelayed	type AsyncIoDelayed		32
+nim	AsyncStream	_._/src/asyncio/exports/asynciochilds.html#AsyncStream	type AsyncStream		37
+nim	AsyncStreamReader	_._/src/asyncio/exports/asynciochilds.html#AsyncStreamReader	type AsyncStreamReader		44
+nim	AsyncStreamWriter	_._/src/asyncio/exports/asynciochilds.html#AsyncStreamWriter	type AsyncStreamWriter		50
+nim	AsyncString	_._/src/asyncio/exports/asynciochilds.html#AsyncString	type AsyncString		56
+nim	AsyncTeeReader	_._/src/asyncio/exports/asynciochilds.html#AsyncTeeReader	type AsyncTeeReader		61
+nim	AsyncTeeWriter	_._/src/asyncio/exports/asynciochilds.html#AsyncTeeWriter	type AsyncTeeWriter		68
+nim	AsyncVoid	_._/src/asyncio/exports/asynciochilds.html#AsyncVoid	type AsyncVoid		72
+nim	addReader	_._/src/asyncio/exports/asynciochilds.html#addReader,AsyncChainReader,varargs[AsyncIoBase]	proc addReader(self: AsyncChainReader; readers: varargs[AsyncIoBase])		77
+nim	bufLen	_._/src/asyncio/exports/asynciochilds.html#bufLen,AsyncBuffer	proc bufLen(self: AsyncBuffer): tuple[readBuffer, writeBuffer: int]		84
+nim	bufLen	_._/src/asyncio/exports/asynciochilds.html#bufLen,AsyncStream	proc bufLen(self: AsyncStream): int		87
+nim	bufLen	_._/src/asyncio/exports/asynciochilds.html#bufLen,AsyncStreamReader	proc bufLen(self: AsyncStreamReader): int		90
+nim	bufLen	_._/src/asyncio/exports/asynciochilds.html#bufLen,AsyncStreamWriter	proc bufLen(self: AsyncStreamWriter): int		93
+nim	fillBuffer	_._/src/asyncio/exports/asynciochilds.html#fillBuffer,AsyncBuffer,int,Future[void]	proc fillBuffer(self: AsyncBuffer; count: int = 0; cancelFut: Future[void] = nil): Future[\n    int]		101
+nim	flush	_._/src/asyncio/exports/asynciochilds.html#flush,AsyncBuffer,Future[void]	proc flush(self: AsyncBuffer; cancelFut: Future[void] = nil): Future[int]		106
+nim	new	_._/src/asyncio/exports/asynciochilds.html#new,typeAsyncBuffer,AsyncIoBase	proc new(T: type AsyncBuffer; stream: AsyncIoBase; bufSize = defaultAsyncBufferSize): T:type		112
+nim	new	_._/src/asyncio/exports/asynciochilds.html#new,typeAsyncBuffer,AsyncIoBase,int,int	proc new(T: type AsyncBuffer; stream: AsyncIoBase; readBufSize, writeBufSize: int): T:type		115
+nim	new	_._/src/asyncio/exports/asynciochilds.html#new,typeAsyncChainReader,varargs[AsyncIoBase]	proc new(T: type AsyncChainReader; readers: varargs[AsyncIoBase]): T:type		123
+nim	new	_._/src/asyncio/exports/asynciochilds.html#new,typeAsyncStream	proc new(T: type AsyncStream): T:type		138
+nim	new	_._/src/asyncio/exports/asynciochilds.html#new,typeAsyncString,varargs[string]	proc new(T: type AsyncString; data: varargs[string]): AsyncString		149
+nim	new	_._/src/asyncio/exports/asynciochilds.html#new,typeAsyncTeeReader,AsyncIoBase,AsyncIoBase	proc new(T: type AsyncTeeReader; reader: AsyncIoBase; writer: AsyncIoBase): T:type		157
+nim	new	_._/src/asyncio/exports/asynciochilds.html#new,typeAsyncTeeWriter,varargs[AsyncIoBase]	proc new(T: type AsyncTeeWriter; writers: varargs[AsyncIoBase]): T:type		161
+nim	new	_._/src/asyncio/exports/asynciochilds.html#new,typeAsyncVoid	proc new(T: type AsyncVoid): T:type		168
+nim	reader	_._/src/asyncio/exports/asynciochilds.html#reader,AsyncStream	proc reader(self: AsyncStream): AsyncStreamReader		172
+nim	writer	_._/src/asyncio/exports/asynciochilds.html#writer,AsyncStream	proc writer(self: AsyncStream): AsyncStreamWriter		175
+nimgrp	new	_._/src/asyncio/exports/asynciochilds.html#new-procs-all	proc		112
+nimgrp	buflen	_._/src/asyncio/exports/asynciochilds.html#bufLen-procs-all	proc		84
