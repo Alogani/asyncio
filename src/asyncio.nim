@@ -1,7 +1,8 @@
 import std/[asyncdispatch]
 export asyncdispatch
 
-#export asyncsync #-> already exported in asynciobase
+import asyncsync
+export asyncsync
 
 import asyncio/exports/[asynciobase, asynciochilds]
 export asynciobase, asynciochilds

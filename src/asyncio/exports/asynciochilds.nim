@@ -127,6 +127,10 @@ proc new*(T: type AsyncChainReader, readers: varargs[AsyncIoBase]): T =
         allReaderLocks.add(r.readLock)
     result.init(readLock = allReaderLocks.merge(), writeLock = nil)
 
+proc new*(T: type AsyncIoDelayed; stream: AsyncIoBase, delayMs: float): T =
+    result = T(stream: stream, delayMs: delayMs)
+    result.init(readLock = stream.readLock, writeLock = stream.writeLock)
+
 proc new(T: type AsyncStreamReader, buffer: Buffer, hasData: Event, writerClosed: ref bool): T =
     result = T(buffer: buffer, hasData: hasData, writerClosed: writerClosed)
     result.init(readLock = Lock.new(), writeLock = nil)
