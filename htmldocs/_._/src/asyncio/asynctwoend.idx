@@ -1,6 +1,0 @@
-nimTitle	asynctwoend	_._/src/asyncio/asynctwoend.html	module src/asyncio/asynctwoend		0
-nim	AsyncTwoEnd	_._/src/asyncio/asynctwoend.html#AsyncTwoEnd	type AsyncTwoEnd		5
-nim	init	_._/src/asyncio/asynctwoend.html#init,AsyncTwoEnd,AsyncIoBase,AsyncIoBase	proc init(self: AsyncTwoEnd; reader, writer: AsyncIoBase)		11
-nim	reader	_._/src/asyncio/asynctwoend.html#reader,AsyncTwoEnd	proc reader(self: AsyncTwoEnd): AsyncIoBase		16
-nim	writer	_._/src/asyncio/asynctwoend.html#writer,AsyncTwoEnd	proc writer(self: AsyncTwoEnd): AsyncIoBase		19
-nim	close	_._/src/asyncio/asynctwoend.html#close.e,AsyncTwoEnd	method close(self: AsyncTwoEnd)		31

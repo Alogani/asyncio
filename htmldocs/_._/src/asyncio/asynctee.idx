@@ -1,6 +1,0 @@
-nimTitle	asynctee	_._/src/asyncio/asynctee.html	module src/asyncio/asynctee		0
-nim	AsyncTeeReader	_._/src/asyncio/asynctee.html#AsyncTeeReader	type AsyncTeeReader		6
-nim	AsyncTeeWriter	_._/src/asyncio/asynctee.html#AsyncTeeWriter	type AsyncTeeWriter		12
-nim	new	_._/src/asyncio/asynctee.html#new,typeAsyncTeeReader,AsyncIoBase,AsyncIoBase	proc new(T: type AsyncTeeReader; reader: AsyncIoBase; writer: AsyncIoBase): T:type		19
-nim	new	_._/src/asyncio/asynctee.html#new,typeAsyncTeeWriter,varargs[AsyncIoBase]	proc new(T: type AsyncTeeWriter; writers: varargs[AsyncIoBase]): T:type		43
-nimgrp	new	_._/src/asyncio/asynctee.html#new-procs-all	proc		19

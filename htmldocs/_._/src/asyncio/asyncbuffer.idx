@@ -1,8 +1,0 @@
-nimTitle	asyncbuffer	_._/src/asyncio/asyncbuffer.html	module src/asyncio/asyncbuffer		0
-nim	AsyncBuffer	_._/src/asyncio/asyncbuffer.html#AsyncBuffer	type AsyncBuffer		9
-nim	new	_._/src/asyncio/asyncbuffer.html#new,typeAsyncBuffer,AsyncIoBase	proc new(T: type AsyncBuffer; stream: AsyncIoBase; bufSize = defaultBufSize): T:type		19
-nim	new	_._/src/asyncio/asyncbuffer.html#new,typeAsyncBuffer,AsyncIoBase,int,int	proc new(T: type AsyncBuffer; stream: AsyncIoBase; readBufSize, writeBufSize: int): T:type		20
-nim	flush	_._/src/asyncio/asyncbuffer.html#flush,AsyncBuffer,Future[void]	proc flush(self: AsyncBuffer; cancelFut: Future[void] = nil): Future[int]		21
-nim	fillBuffer	_._/src/asyncio/asyncbuffer.html#fillBuffer,AsyncBuffer,int,Future[void]	proc fillBuffer(self: AsyncBuffer; count: int = 0; cancelFut: Future[void] = nil): Future[\n    int]		22
-nim	bufLen	_._/src/asyncio/asyncbuffer.html#bufLen,AsyncBuffer	proc bufLen(self: AsyncBuffer): tuple[readBuffer, writeBuffer: int]		24
-nimgrp	new	_._/src/asyncio/asyncbuffer.html#new-procs-all	proc		19

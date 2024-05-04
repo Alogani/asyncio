@@ -1,5 +1,0 @@
-nimTitle	asyncpipe	_._/src/asyncio/asyncpipe.html	module src/asyncio/asyncpipe		0
-nim	AsyncPipe	_._/src/asyncio/asyncpipe.html#AsyncPipe	type AsyncPipe		6
-nim	new	_._/src/asyncio/asyncpipe.html#new,typeAsyncPipe	proc new(T: type AsyncPipe): T:type		8
-nim	reader	_._/src/asyncio/asyncpipe.html#reader,AsyncPipe	proc reader(self: AsyncPipe): AsyncFile		21
-nim	writer	_._/src/asyncio/asyncpipe.html#writer,AsyncPipe	proc writer(self: AsyncPipe): AsyncFile		22

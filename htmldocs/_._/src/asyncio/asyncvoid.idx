@@ -1,3 +1,0 @@
-nimTitle	asyncvoid	_._/src/asyncio/asyncvoid.html	module src/asyncio/asyncvoid		0
-nim	AsyncVoid	_._/src/asyncio/asyncvoid.html#AsyncVoid	type AsyncVoid		5
-nim	new	_._/src/asyncio/asyncvoid.html#new,typeAsyncVoid	proc new(T: type AsyncVoid): T:type		9
