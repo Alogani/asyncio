@@ -1,11 +1,4 @@
 import ../src/asyncio
-import ../src/asyncio/asyncbuffer
-import ../src/asyncio/asynchainreader
-import ../src/asyncio/asynciodelayed
-import ../src/asyncio/asyncpipe
-import ../src/asyncio/asyncstream
-import ../src/asyncio/asynctee
-import ../src/asyncio/asyncvoid
-import ../src/asyncio/exports/asyncfile
 import ../src/asyncio/exports/asynciobase
+import ../src/asyncio/exports/asynciochilds
 import ../src/asyncio/streamconverter

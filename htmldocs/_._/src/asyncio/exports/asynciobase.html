@@ -169,9 +169,11 @@
                                     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Kick out all pending readers and writers The consequence for readers and writers are the same as if they would have used <tt class="docutils literal"><span class="pre"><span class="Identifier">read</span><span class="Punctuation">(</span><span class="Operator">...</span><span class="Punctuation">,</span> <span class="Identifier">cancelFut</span><span class="Punctuation">)</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">write</span><span class="Punctuation">(</span><span class="Operator">...</span><span class="Punctuation">,</span> <span class="Identifier">cancelFut</span><span class="Punctuation">)</span></span></tt>
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L130" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L130" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <p>Kick out all pending readers and writers</p>
+<p>The consequence for readers and writers are the same as if they would have used <tt class="docutils literal"><span class="pre"><span class="Identifier">read</span><span class="Punctuation">(</span><span class="Operator">...</span><span class="Punctuation">,</span> <span class="Identifier">cancelFut</span><span class="Punctuation">)</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">write</span><span class="Punctuation">(</span><span class="Operator">...</span><span class="Punctuation">,</span> <span class="Identifier">cancelFut</span><span class="Punctuation">)</span></span></tt></p>
+
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L138" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L138" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -185,8 +187,8 @@
   <dd>
     
     Execute cancelAll, then read all available data By default, use a minimal timer to know when data is fully read
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L147" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L147" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L156" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L156" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -212,9 +214,11 @@
               <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Await the data read len is count If cancelled was triggered, no attempt to read data is made and an empty string is returned If cancelled is triggered during read, all available read data is returned (can be an empty string)
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L89" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L89" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <p>Await the data read len is count</p>
+<p>If cancelled was triggered, no attempt to read data is made and an empty string is returned. If cancelled is triggered during read, all available read data is returned (can be an empty string)</p>
+
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L91" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L91" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -228,8 +232,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L114" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L114" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L120" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L120" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -243,9 +247,11 @@
     <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Await at least one byte is available. So read can be from 1 byte to <tt class="docutils literal"><span class="pre"><span class="Identifier">count</span></span></tt> If cancelled is triggered during read, an empty string is returned
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L96" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L96" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <p>Await at least one byte is available. So read can be from 1 byte to <tt class="docutils literal"><span class="pre"><span class="Identifier">count</span></span></tt></p>
+<p>If cancelled is triggered during read, an empty string is returned</p>
+
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L99" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L99" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -258,9 +264,11 @@
     <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Await at least one byte is available. Try to read a big chunk of data to optimize speed The exact size is implementation specific and can vary between objects
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L102" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L102" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <p>Await at least one byte is available. Try to read a big chunk of data to optimize speed</p>
+<p>The exact size is implementation specific and can vary between objects</p>
+
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L106" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L106" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -274,9 +282,11 @@
     <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Attempt to read up to a newline newline can be kept if <tt class="docutils literal"><span class="pre"><span class="Identifier">keepNewLine</span></span></tt> is set to true
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L108" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L108" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <p>Attempt to read up to a newline or to the end of stream</p>
+<p>newline can be kept if <tt class="docutils literal"><span class="pre"><span class="Identifier">keepNewLine</span></span></tt> is set to true, which can be used to distinguish when end of stream is reached</p>
+
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L113" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L113" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -289,9 +299,9 @@
     <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Transfer read from src immediatly to dest using readChunk Returns a future when completed If <a class="reference internal" href="#flushAndCloseAfter">flushAndCloseAfter</a> is set to true, src will be cleared then closed when transfer is over
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L155" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L155" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    Transfer read from src immediatly to dest using readChunk Returns a future when completed If <tt class="docutils literal"><span class="pre"><span class="Identifier">flushAndCloseAfter</span></span></tt> is set to true, src will be cleared then closed when transfer is over
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L164" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L164" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -304,9 +314,11 @@
            <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Await write is available and write to it Number of bytes written is returned and can be inferior to <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span><span class="Operator">.</span><span class="Identifier">len</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt>
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L118" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L118" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <p>Await write is available and write to it</p>
+<p>Number of bytes written is returned and can be inferior to <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span><span class="Operator">.</span><span class="Identifier">len</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt></p>
+
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L124" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L124" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -318,9 +330,11 @@
     <span class="Identifier">void</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Await write is available and write to it Number of bytes can be inferior to <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span><span class="Operator">.</span><span class="Identifier">len</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt>
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L124" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L124" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <p>Await write is available and write to it</p>
+<p>Number of bytes can be inferior to <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span><span class="Operator">.</span><span class="Identifier">len</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt></p>
+
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L131" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L131" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -356,7 +370,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-04 07:52:11 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-04 08:42:39 UTC</small>
       </div>
     </div>
   </div>

@@ -87,7 +87,9 @@ proc writeSelect(self: AsyncFile): Future[void] =
     AsyncFD(self.fd).addWrite(cb)
 
 proc unregister*(self: AsyncFile) =
-    ## Clean everything except don't close the underlying file/fd
+    ## This is equivalent to a soft close
+    ## 
+    ## This means, it will considered as closed when trying to read/write to it, but the underlying file descriptor will still be open
     if not self.unregistered:
         self.unregistered = true
         self.cancelled.trigger()

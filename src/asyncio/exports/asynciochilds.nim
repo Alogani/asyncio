@@ -13,11 +13,11 @@ else:
     import ../private/asynciochilds_posix
     export asynciochilds_posix
 
-const defaultAsyncBufferSize = 1024
+const defaultAsyncBufferSize* = 1024
 
 type
     AsyncBuffer* = ref object of AsyncIoBase
-        ## An object that allow to bufferize other AsyncIoBase objects
+        ## An object that allow to bufferize other AsyncIoBase objects.
         ## Slower for local files
         stream*: AsyncIoBase
         readBuffer: Buffer
@@ -36,27 +36,31 @@ type
 
     AsyncStream* = ref object of AsyncTwoEnd
         ## An in-memory async buffer
-        ## Because it is async (read pending for data), it can be highly subjects to deadlocks
-        ## To avoid deadlocks: ensure to a least close writer when finished
+        ## 
+        ## Because it is async (read pending for data), it can be highly subjects to deadlocks.
+        ## To avoid deadlocks: ensure to a least close writer when finished.
         ## Not thread safe
     
     AsyncStreamReader* = ref object of AsyncIoBase
-        ## Can't be instantiated directly
+        ## Reader object of AsyncStream. Can't be instantiated directly
         buffer: Buffer
         hasData: Event
         writerClosed: ref bool
 
     AsyncStreamWriter* = ref object of AsyncIoBase
-        ## Can't be instantiated directly
+        ## Writer object of AsyncStream. Can't be instantiated directly
         buffer: Buffer
         hasData: Event
         writerClosed: ref bool
 
     AsyncString* = ref object of AsyncStreamReader
         ## Immutable async stream/buffer, that can only be written at instantiation
+        ## 
+        ## No deadlock is possible
 
     AsyncTeeReader* = ref object of AsyncIoBase
         ## Object that allows to clone/tee data when reading it
+        ## 
         ## Meaning that reading from it will both read (and return) from underlying reader, and write the data to the underlying writer
         reader: AsyncIoBase
         writer: AsyncIoBase
@@ -66,7 +70,7 @@ type
         writers*: seq[AsyncIoBase]
 
     AsyncVoid* = ref object of AsyncIoBase
-        ## Does nothing and can only be written to
+        ## Does nothing and can only be written to.
         ## Equivalent of a /dev/null, write to it will do nothing
 
 
@@ -95,10 +99,12 @@ proc fillBufferUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[void]):
     self.readBuffer.write(data)
 
 proc fillBuffer*(self: AsyncBuffer, count: int = 0, cancelFut: Future[void] = nil): Future[int] {.async.} =
+    ## Equivalent to a read but instead of returning data, keep it in its internal memory
     withLock self.readLock:
         return await self.fillBufferUnlocked(count, cancelFut)
 
 proc flush*(self: AsyncBuffer, cancelFut: Future[void] = nil): Future[int] =
+    ## Empty all data in the internal memory. it doesn't flush the wrapped stream
     var data = self.readBuffer.readAll()
     if data.len() != 0:
         return self.stream.write(data, cancelFut)
@@ -107,8 +113,7 @@ proc new*(T: type AsyncBuffer, stream: AsyncIoBase, bufSize = defaultAsyncBuffer
     return AsyncBuffer.new(stream, bufSize, bufSize)
 
 proc new*(T: type AsyncBuffer, stream: AsyncIoBase, readBufSize, writeBufSize: int): T =
-    ## Create a new AsyncBuffer
-    ## The buffer will be flushed automatically if bufSize is reached, or never is bufSize == -1
+    ## Create a new AsyncBuffer.
     result = T(
         readBuffer: Buffer.new(), readBufSize: readBufSize,
         writeBuffer: Buffer.new(), writeBufSize: writeBufSize,
@@ -142,6 +147,7 @@ proc new*(T: type AsyncStream): T =
     )
 
 proc new*(T: type AsyncString, data: varargs[string]): AsyncString =
+    ## The stream can only be filled using `data` argument
     var stream = AsyncStream.new()
     for chunk in data:
         discard stream.writeUnlocked(chunk, nil)

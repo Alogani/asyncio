@@ -49,7 +49,7 @@ waitFor main()
 
 Full docs can be browsered [here](https://htmlpreview.github.io/?https://github.com/Alogani/asyncio/blob/main/htmldocs/asyncio.html)
 
-For common methods across all objects, please see [AsyncIoBase](https://github.com/Alogani/asyncio/blob/main/src/asyncio/exports/asynciobase.nim)
+For common methods across all objects, please see [AsyncIoBase](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Alogani/asyncio/main/htmldocs/_._/src/asyncio/exports/asynciobase.html)
 
 Please see tests folder or source code for specific usage of objects
 

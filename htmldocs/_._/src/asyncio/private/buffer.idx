@@ -1,11 +1,11 @@
 nimTitle	buffer	_._/src/asyncio/private/buffer.html	module src/asyncio/private/buffer		0
 nim	Buffer	_._/src/asyncio/private/buffer.html#Buffer	type Buffer		3
 nim	new	_._/src/asyncio/private/buffer.html#new,typeBuffer	proc new(T: type Buffer): T:type		10
-nim	read	_._/src/asyncio/private/buffer.html#read,Buffer,int	proc read(self: Buffer; count: int): string		11
-nim	readLine	_._/src/asyncio/private/buffer.html#readLine,Buffer	proc readLine(self: Buffer; keepNewLine = false): string		12
-nim	readChunk	_._/src/asyncio/private/buffer.html#readChunk,Buffer	proc readChunk(self: Buffer): string		13
-nim	readAll	_._/src/asyncio/private/buffer.html#readAll,Buffer	proc readAll(self: Buffer): string		14
-nim	write	_._/src/asyncio/private/buffer.html#write,Buffer,sinkstring	proc write(self: Buffer; data: sink string)		15
-nim	clear	_._/src/asyncio/private/buffer.html#clear,Buffer	proc clear(self: Buffer)		16
-nim	len	_._/src/asyncio/private/buffer.html#len,Buffer	proc len(self: Buffer): int		17
-nim	isEmpty	_._/src/asyncio/private/buffer.html#isEmpty,Buffer	proc isEmpty(self: Buffer): bool		18
+nim	clear	_._/src/asyncio/private/buffer.html#clear,Buffer	proc clear(self: Buffer)		13
+nim	isEmpty	_._/src/asyncio/private/buffer.html#isEmpty,Buffer	proc isEmpty(self: Buffer): bool		16
+nim	len	_._/src/asyncio/private/buffer.html#len,Buffer	proc len(self: Buffer): int		20
+nim	read	_._/src/asyncio/private/buffer.html#read,Buffer,int	proc read(self: Buffer; count: int): string		24
+nim	readLine	_._/src/asyncio/private/buffer.html#readLine,Buffer	proc readLine(self: Buffer; keepNewLine = false): string		47
+nim	readChunk	_._/src/asyncio/private/buffer.html#readChunk,Buffer	proc readChunk(self: Buffer): string		62
+nim	readAll	_._/src/asyncio/private/buffer.html#readAll,Buffer	proc readAll(self: Buffer): string		67
+nim	write	_._/src/asyncio/private/buffer.html#write,Buffer,sinkstring	proc write(self: Buffer; data: sink string)		72
