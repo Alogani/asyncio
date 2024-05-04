@@ -108,6 +108,7 @@
   <li><a class="reference" href="#new%2CtypeAsyncBuffer%2CAsyncIoBase" title="new(T: type AsyncBuffer; stream: AsyncIoBase; bufSize = defaultAsyncBufferSize): T:type">new(T: type AsyncBuffer; stream: AsyncIoBase; bufSize = defaultAsyncBufferSize): T:type</a></li>
 <li><a class="reference" href="#new%2CtypeAsyncBuffer%2CAsyncIoBase%2Cint%2Cint" title="new(T: type AsyncBuffer; stream: AsyncIoBase; readBufSize, writeBufSize: int): T:type">new(T: type AsyncBuffer; stream: AsyncIoBase; readBufSize, writeBufSize: int): T:type</a></li>
 <li><a class="reference" href="#new%2CtypeAsyncChainReader%2Cvarargs%5BAsyncIoBase%5D" title="new(T: type AsyncChainReader; readers: varargs[AsyncIoBase]): T:type">new(T: type AsyncChainReader; readers: varargs[AsyncIoBase]): T:type</a></li>
+<li><a class="reference" href="#new%2CtypeAsyncIoDelayed%2CAsyncIoBase%2Cfloat" title="new(T: type AsyncIoDelayed; stream: AsyncIoBase; delayMs: float): T:type">new(T: type AsyncIoDelayed; stream: AsyncIoBase; delayMs: float): T:type</a></li>
 <li><a class="reference" href="#new%2CtypeAsyncStream" title="new(T: type AsyncStream): T:type">new(T: type AsyncStream): T:type</a></li>
 <li><a class="reference" href="#new%2CtypeAsyncString%2Cvarargs%5Bstring%5D" title="new(T: type AsyncString; data: varargs[string]): AsyncString">new(T: type AsyncString; data: varargs[string]): AsyncString</a></li>
 <li><a class="reference" href="#new%2CtypeAsyncTeeReader%2CAsyncIoBase%2CAsyncIoBase" title="new(T: type AsyncTeeReader; reader: AsyncIoBase; writer: AsyncIoBase): T:type">new(T: type AsyncTeeReader; reader: AsyncIoBase; writer: AsyncIoBase): T:type</a></li>
@@ -410,13 +411,23 @@
 
   </dd>
 </div>
+<div id="new,typeAsyncIoDelayed,AsyncIoBase,float">
+  <dt><pre><span class="Keyword">proc</span> <a href="#new%2CtypeAsyncIoDelayed%2CAsyncIoBase%2Cfloat"><span class="Identifier">new</span></a><span class="Other">(</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">type</span> <span class="Identifier">AsyncIoDelayed</span><span class="Other">;</span> <span class="Identifier">stream</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">delayMs</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T:type</span></pre></dt>
+  <dd>
+    
+    
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L130" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L130" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
 <div id="new,typeAsyncStream">
   <dt><pre><span class="Keyword">proc</span> <a href="#new%2CtypeAsyncStream"><span class="Identifier">new</span></a><span class="Other">(</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">type</span> <span class="Identifier">AsyncStream</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T:type</span></pre></dt>
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L138" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L138" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L142" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L142" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -425,8 +436,8 @@
   <dd>
     
     The stream can only be filled using <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span></span></tt> argument
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L149" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L149" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L153" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L153" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -435,8 +446,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L157" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L157" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L161" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L161" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -445,8 +456,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L161" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L161" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L165" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L165" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -455,8 +466,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L168" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L168" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L172" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L172" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -469,8 +480,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L172" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L172" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L176" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L176" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -483,8 +494,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L175" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L175" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciochilds.nim#L179" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L179" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -506,7 +517,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-04 09:06:19 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-04 09:13:05 UTC</small>
       </div>
     </div>
   </div>
