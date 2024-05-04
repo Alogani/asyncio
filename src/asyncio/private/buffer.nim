@@ -7,18 +7,19 @@ type Buffer* = ref object
     searchNLPos: int
     queue: Deque[string]
 
-proc new*(T: type Buffer): T
-proc read*(self: Buffer, count: int): string
-proc readLine*(self: Buffer, keepNewLine = false): string
-proc readChunk*(self: Buffer): string
-proc readAll*(self: Buffer): string
-proc write*(self: Buffer, data: sink string)
-proc clear*(self: Buffer)
-proc len*(self: Buffer): int
-proc isEmpty*(self: Buffer): bool
-
 proc new*(T: type Buffer): T =
     T()
+
+proc clear*(self: Buffer) =
+    self.queue.clear()
+
+proc isEmpty*(self: Buffer): bool =
+    ## Mor eefficient than len
+    self.queue.len() == 0
+
+proc len*(self: Buffer): int =
+    for i in self.queue.items():
+        result += i.len()
 
 proc read*(self: Buffer, count: int): string =
     if count <= 0:
@@ -70,14 +71,3 @@ proc readAll*(self: Buffer): string =
 
 proc write*(self: Buffer, data: sink string) =
     self.queue.addLast(data)
-
-proc clear*(self: Buffer) =
-    self.queue.clear()
-
-proc len*(self: Buffer): int =
-    for i in self.queue.items():
-        result += i.len()
-
-proc isEmpty*(self: Buffer): bool =
-    ## Mor eefficient than len
-    self.queue.len() == 0
