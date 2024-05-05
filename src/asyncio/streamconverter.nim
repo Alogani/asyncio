@@ -1,4 +1,5 @@
 import std/streams
+import asyncsync
 import ./exports/asynciobase {.all.}
 
 export streams
