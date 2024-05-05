@@ -36,11 +36,11 @@ type
 
     AsyncStream* = ref object of AsyncTwoEnd
         ## An in-memory async buffer
-        ## 
+        ##
         ## Because it is async (read pending for data), it can be highly subjects to deadlocks.
         ## To avoid deadlocks: ensure to a least close writer when finished.
         ## Not thread safe
-    
+
     AsyncStreamReader* = ref object of AsyncIoBase
         ## Reader object of AsyncStream. Can't be instantiated directly
         buffer: Buffer
@@ -55,16 +55,16 @@ type
 
     AsyncString* = ref object of AsyncStreamReader
         ## Immutable async stream/buffer, that can only be written at instantiation
-        ## 
+        ##
         ## No deadlock is possible
 
     AsyncTeeReader* = ref object of AsyncIoBase
         ## Object that allows to clone/tee data when reading it
-        ## 
+        ##
         ## Meaning that reading from it will both read (and return) from underlying reader, and write the data to the underlying writer
         reader: AsyncIoBase
         writer: AsyncIoBase
-    
+
     AsyncTeeWriter* = ref object of AsyncIoBase
         ## Object that allows to clone data written to it to multiple writers
         writers*: seq[AsyncIoBase]
@@ -93,12 +93,15 @@ proc bufLen*(self: AsyncStreamReader): int =
 proc bufLen*(self: AsyncStreamWriter): int =
     self.buffer.len()
 
-proc fillBufferUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[void]): Future[int] {.async.} =
-    let data = await self.stream.readUnlocked(if count == 0: self.readBufSize else: count, cancelFut)
+proc fillBufferUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[
+        void]): Future[int] {.async.} =
+    let data = await self.stream.readUnlocked(if count ==
+            0: self.readBufSize else: count, cancelFut)
     result = data.len()
     self.readBuffer.write(data)
 
-proc fillBuffer*(self: AsyncBuffer, count: int = 0, cancelFut: Future[void] = nil): Future[int] {.async.} =
+proc fillBuffer*(self: AsyncBuffer, count: int = 0, cancelFut: Future[
+        void] = nil): Future[int] {.async.} =
     ## Equivalent to a read but instead of returning data, keep it in its internal memory
     withLock self.readLock:
         return await self.fillBufferUnlocked(count, cancelFut)
@@ -109,10 +112,12 @@ proc flush*(self: AsyncBuffer, cancelFut: Future[void] = nil): Future[int] =
     if data.len() != 0:
         return self.stream.write(data, cancelFut)
 
-proc new*(T: type AsyncBuffer, stream: AsyncIoBase, bufSize = defaultAsyncBufferSize): T =
+proc new*(T: type AsyncBuffer, stream: AsyncIoBase,
+        bufSize = defaultAsyncBufferSize): T =
     return AsyncBuffer.new(stream, bufSize, bufSize)
 
-proc new*(T: type AsyncBuffer, stream: AsyncIoBase, readBufSize, writeBufSize: int): T =
+proc new*(T: type AsyncBuffer, stream: AsyncIoBase, readBufSize,
+        writeBufSize: int): T =
     ## Create a new AsyncBuffer.
     result = T(
         readBuffer: Buffer.new(), readBufSize: readBufSize,
@@ -131,11 +136,13 @@ proc new*(T: type AsyncIoDelayed; stream: AsyncIoBase, delayMs: float): T =
     result = T(stream: stream, delayMs: delayMs)
     result.init(readLock = stream.readLock, writeLock = stream.writeLock)
 
-proc new(T: type AsyncStreamReader, buffer: Buffer, hasData: Event, writerClosed: ref bool): T =
+proc new(T: type AsyncStreamReader, buffer: Buffer, hasData: Event,
+        writerClosed: ref bool): T =
     result = T(buffer: buffer, hasData: hasData, writerClosed: writerClosed)
     result.init(readLock = Lock.new(), writeLock = nil)
 
-proc new(T: type AsyncStreamWriter, buffer: Buffer, hasData: Event, writerClosed: ref bool): T =
+proc new(T: type AsyncStreamWriter, buffer: Buffer, hasData: Event,
+        writerClosed: ref bool): T =
     result = T(buffer: buffer, hasData: hasData, writerClosed: writerClosed)
     result.init(readLock = nil, writeLock = Lock.new())
 
@@ -221,12 +228,14 @@ method close(self: AsyncTeeWriter) =
 method close(self: AsyncVoid) =
     self.closed = true
 
-method readAvailableUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[void]): Future[string] {.async.} =
+method readAvailableUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[
+        void]): Future[string] {.async.} =
     if self.readBuffer.len() < count:
         discard await self.fillBufferUnlocked(max(count, self.readBufSize), cancelFut)
     return self.readBuffer.read(count)
 
-method readAvailableUnlocked(self: AsyncChainReader, count: int, cancelFut: Future[void]): Future[string] {.async.} =
+method readAvailableUnlocked(self: AsyncChainReader, count: int,
+        cancelFut: Future[void]): Future[string] {.async.} =
     while result == "":
         if self.readers.len() == 0:
             self.close()
@@ -237,11 +246,13 @@ method readAvailableUnlocked(self: AsyncChainReader, count: int, cancelFut: Futu
         if result == "":
             discard self.readers.popFirst()
 
-method readAvailableUnlocked(self: AsyncIoDelayed, count: int, cancelFut: Future[void]): Future[string] {.async.} =
+method readAvailableUnlocked(self: AsyncIoDelayed, count: int,
+        cancelFut: Future[void]): Future[string] {.async.} =
     await sleepAsync(self.delayMs)
     return await self.stream.readAvailableUnlocked(count, cancelFut)
 
-method readAvailableUnlocked(self: AsyncStreamReader, count: int, cancelFut: Future[void]): Future[string] {.async.} =
+method readAvailableUnlocked(self: AsyncStreamReader, count: int,
+        cancelFut: Future[void]): Future[string] {.async.} =
     if self.closed:
         return
     if not self.writerClosed[]:
@@ -250,18 +261,21 @@ method readAvailableUnlocked(self: AsyncStreamReader, count: int, cancelFut: Fut
     if self.buffer.isEmpty():
         self.hasData.clear()
 
-method readAvailableUnlocked(self: AsyncTeeReader, count: int, cancelFut: Future[void]): Future[string] {.async.} =
+method readAvailableUnlocked(self: AsyncTeeReader, count: int,
+        cancelFut: Future[void]): Future[string] {.async.} =
     result = await self.reader.readAvailableUnlocked(count, cancelFut)
     if result != "":
         discard await self.writer.write(result, cancelFut) # isCancellation a good thing ?
 
-method readChunkUnlocked(self: AsyncBuffer, cancelFut: Future[void]): Future[string] {.async.} =
+method readChunkUnlocked(self: AsyncBuffer, cancelFut: Future[void]): Future[
+        string] {.async.} =
     if self.readBuffer.isEmpty():
         return await self.stream.readUnlocked(self.readBufSize, cancelFut)
     else:
         return self.readBuffer.readChunk()
 
-method readChunkUnlocked(self: AsyncChainReader, cancelFut: Future[void]): Future[string] {.async.} =
+method readChunkUnlocked(self: AsyncChainReader, cancelFut: Future[
+        void]): Future[string] {.async.} =
     while result == "":
         if self.readers.len() == 0:
             self.close()
@@ -272,11 +286,13 @@ method readChunkUnlocked(self: AsyncChainReader, cancelFut: Future[void]): Futur
         if result == "":
             discard self.readers.popFirst()
 
-method readChunkUnlocked(self: AsyncIoDelayed, cancelFut: Future[void]): Future[string] {.async.} =
+method readChunkUnlocked(self: AsyncIoDelayed, cancelFut: Future[void]): Future[
+        string] {.async.} =
     await sleepAsync(self.delayMs)
     return await self.stream.readChunkUnlocked(cancelFut)
 
-method readChunkUnlocked(self: AsyncStreamReader, cancelFut: Future[void]): Future[string] {.async.} =
+method readChunkUnlocked(self: AsyncStreamReader, cancelFut: Future[
+        void]): Future[string] {.async.} =
     if self.closed:
         return
     if not self.writerClosed[]:
@@ -287,12 +303,14 @@ method readChunkUnlocked(self: AsyncStreamReader, cancelFut: Future[void]): Futu
     else:
         result = self.buffer.readChunk()
 
-method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[string] {.async.} =
+method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[
+        string] {.async.} =
     result = await self.reader.readChunkUnlocked(cancelFut)
     if result != "":
         discard await self.writer.write(result, cancelFut)
 
-method writeUnlocked(self: AsyncBuffer, data: string, cancelFut: Future[void]): Future[int] {.async.} =
+method writeUnlocked(self: AsyncBuffer, data: string, cancelFut: Future[
+        void]): Future[int] {.async.} =
     let dataLen = data.len()
     self.writeBuffer.write(data)
     if self.writeBuffer.len() >= self.writeBufSize:
@@ -300,28 +318,31 @@ method writeUnlocked(self: AsyncBuffer, data: string, cancelFut: Future[void]): 
     else:
         return dataLen
 
-method writeUnlocked(self: AsyncIoDelayed, data: string, cancelFut: Future[void]): Future[int] {.async.} =
+method writeUnlocked(self: AsyncIoDelayed, data: string, cancelFut: Future[
+        void]): Future[int] {.async.} =
     await sleepAsync(self.delayMs)
     return await self.stream.writeUnlocked(data, cancelFut)
 
-method writeUnlocked(self: AsyncStreamWriter, data: string, cancelFut: Future[void]): Future[int] {.async.} =
+method writeUnlocked(self: AsyncStreamWriter, data: string, cancelFut: Future[
+        void]): Future[int] {.async.} =
     if self.closed or self.writerClosed[]:
         return 0
     self.hasData.trigger()
     self.buffer.write(data)
     return data.len()
 
-method writeUnlocked(self: AsyncTeeWriter, data: string, cancelFut: Future[void]): Future[int] {.async.} =
+method writeUnlocked(self: AsyncTeeWriter, data: string, cancelFut: Future[
+        void]): Future[int] {.async.} =
     var allFuts = newSeqOfCap[Future[int]](self.writers.len())
     for w in self.writers:
         allFuts.add(w.writeUnlocked(data, cancelFut))
     for res in (await all(allFuts)):
         result += res
 
-method writeUnlocked(self: AsyncVoid, data: string, cancelFut: Future[void]): Future[int] =
+method writeUnlocked(self: AsyncVoid, data: string, cancelFut: Future[
+        void]): Future[int] =
     result = newFuture[int]()
     if self.closed:
         result.complete(0)
     else:
         result.complete(data.len())
-    

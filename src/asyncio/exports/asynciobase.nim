@@ -49,20 +49,24 @@ proc writeLock(self: AsyncIoBase): Lock =
 method close*(self: AsyncIoBase) {.gcsafe, base.} =
     discard
 
-method readAvailableUnlocked(self: AsyncIoBase, count: int, cancelFut: Future[void]): Future[string] {.base.} =
+method readAvailableUnlocked(self: AsyncIoBase, count: int, cancelFut: Future[
+        void]): Future[string] {.base.} =
     discard
 
-method writeUnlocked(self: AsyncIoBase, data: string, cancelFut: Future[void]): Future[int] {.base.} =
+method writeUnlocked(self: AsyncIoBase, data: string, cancelFut: Future[
+        void]): Future[int] {.base.} =
     discard
 
-method readUnlocked(self: AsyncIoBase, count: int, cancelFut: Future[void]): Future[string] {.async, base.} =
+method readUnlocked(self: AsyncIoBase, count: int, cancelFut: Future[
+        void]): Future[string] {.async, base.} =
     while result.len() < count:
         let data = await self.readAvailableUnlocked(count - result.len(), cancelFut)
         if data == "":
             break
         result.add(data)
 
-method readLineUnlocked(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void]): Future[string] {.async, base.} =
+method readLineUnlocked(self: AsyncIoBase, keepNewLine = false,
+        cancelFut: Future[void]): Future[string] {.async, base.} =
     # Default implementation
     # Unbuffered by default
     # Use '\n' to search for newline
@@ -77,70 +81,79 @@ method readLineUnlocked(self: AsyncIoBase, keepNewLine = false, cancelFut: Futur
             break
         result.add(data)
 
-method readChunkUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string] {.base.} =
+method readChunkUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[
+        string] {.base.} =
     self.readAvailableUnlocked(ChunkSize, cancelFut)
 
-method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[string] {.async, base.} =
+method readAllUnlocked(self: AsyncIoBase, cancelFut: Future[void]): Future[
+        string] {.async, base.} =
     while true:
         let data = await self.readChunkUnlocked(cancelFut)
         if data == "":
             break
         result.add(data)
 
-proc read*(self: AsyncIoBase, count: Natural, cancelFut: Future[void] = nil): Future[string] {.async.} =
+proc read*(self: AsyncIoBase, count: Natural, cancelFut: Future[
+        void] = nil): Future[string] {.async.} =
     ## Await the data read len is count
-    ## 
+    ##
     ## If cancelled was triggered, no attempt to read data is made and an empty string is returned.
     ## If cancelled is triggered during read, all available read data is returned (can be an empty string)
     withLock self.readLock, cancelFut:
         result = await self.readUnlocked(count, cancelFut)
 
-proc readAvailable*(self: AsyncIoBase, count: Natural, cancelFut: Future[void] = nil): Future[string] {.async.} =
+proc readAvailable*(self: AsyncIoBase, count: Natural, cancelFut: Future[
+        void] = nil): Future[string] {.async.} =
     ## Await at least one byte is available. So read can be from 1 byte to `count`
-    ## 
+    ##
     ## If cancelled is triggered during read, an empty string is returned
     withLock self.readLock, cancelFut:
         result = await self.readAvailableUnlocked(count, cancelFut)
 
-proc readChunk*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[string] {.async.} =
+proc readChunk*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[
+        string] {.async.} =
     ## Await at least one byte is available. Try to read a big chunk of data to optimize speed
-    ## 
+    ##
     ## The exact size is implementation specific and can vary between objects
     withLock self.readLock, cancelFut:
         result = await self.readChunkUnlocked(cancelFut)
 
-proc readLine*(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[void] = nil): Future[string] {.async.} =
+proc readLine*(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[
+        void] = nil): Future[string] {.async.} =
     ## Attempt to read up to a newline or to the end of stream
-    ## 
+    ##
     ## newline can be kept if `keepNewLine` is set to true, which can be used to distinguish when end of stream is reached
     withLock self.readLock, cancelFut:
         result = await self.readLineUnlocked(keepNewLine, cancelFut)
 
-proc readAll*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[string] {.async.} =
+proc readAll*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[
+        string] {.async.} =
     withLock self.readLock, cancelFut:
         result = await self.readAllUnlocked(cancelFut)
 
-proc write*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[int] {.async.} =
+proc write*(self: AsyncIoBase, data: string, cancelFut: Future[
+        void] = nil): Future[int] {.async.} =
     ## Await write is available and write to it
-    ## 
+    ##
     ## Number of bytes written is returned and can be inferior to `data.len()`
     withLock self.writeLock, any(self.cancelled, cancelFut):
-       result = await self.writeUnlocked(data, cancelFut)
+        result = await self.writeUnlocked(data, cancelFut)
 
-proc writeDiscard*(self: AsyncIoBase, data: string, cancelFut: Future[void] = nil): Future[void] =
+proc writeDiscard*(self: AsyncIoBase, data: string, cancelFut: Future[
+        void] = nil): Future[void] =
     ## Await write is available and write to it
-    ## 
+    ##
     ## Number of bytes can be inferior to `data.len()`
     cast[Future[void]](self.write(data, cancelFut))
 
 
 proc cancelAll*(self: AsyncIoBase) {.async.} =
     ## Kick out all pending readers and writers
-    ## 
+    ##
     ## The consequence for readers and writers are the same as if they would have used `read(..., cancelFut)` or `write(..., cancelFut)`
     if self.cancelled.triggered and self.isClosed:
         return
-    if (self.readlock != nil and self.readLock.locked) or 
+    if (self.readlock != nil and self.readLock.locked) or
     (self.writeLock != nil and self.writeLock.locked):
         self.cancelled.trigger()
         if self.readLock != nil:
@@ -160,13 +173,15 @@ proc clear*(self: AsyncIoBase, cancelFut = sleepAsync(ClearWaitMS)) {.async.} =
         if await(self.readChunk(cancelFut)) == "":
             break
 
-proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil, flushAndCloseAfter = false): Future[void] {.async.} =
+proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil,
+        flushAndCloseAfter = false): Future[void] {.async.} =
     ## Transfer read from src immediatly to dest using readChunk
     ## Returns a future when completed
     ## If `flushAndCloseAfter` is set to true, src will be cleared then closed when transfer is over
     withLock src.readLock, cancelFut:
         while true:
-            let data = await src.readChunkUnlocked(any(cancelFut, dest.cancelled))
+            let data = await src.readChunkUnlocked(any(cancelFut,
+                    dest.cancelled))
             if data == "":
                 break
             let count = await dest.write(data, any(cancelFut, src.cancelled))
@@ -175,4 +190,3 @@ proc transfer*(src, dest: AsyncIoBase, cancelFut: Future[void] = nil, flushAndCl
     if flushAndCloseAfter:
         await src.clear()
         src.close()
-    

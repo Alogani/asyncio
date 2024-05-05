@@ -13,7 +13,7 @@ type
         unregistered: bool
         readEvent: ReadEvent
         writeEvent: WriteEvent
-    
+
     AsyncPipe* = ref object of AsyncTwoEnd
 
 
@@ -92,7 +92,7 @@ proc writeSelect(self: AsyncFile): Future[void] =
 
 proc unregister*(self: AsyncFile) =
     ## This is equivalent to a soft close
-    ## 
+    ##
     ## This means, it will considered as closed when trying to read/write to it, but the underlying file descriptor will still be open
     if not self.unregistered:
         self.unregistered = true
@@ -107,7 +107,8 @@ method close(self: AsyncFile) =
         self.unregister()
         discard self.fd.close()
 
-method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[void]): Future[string] {.async.} =
+method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[
+        void]): Future[string] {.async.} =
     if await self.readSelect().wait(any(cancelFut, self.cancelled)):
         result = newString(count)
         let bytesCount = posix.read(self.fd, addr(result[0]), count)
@@ -117,7 +118,8 @@ method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[void
         else:
             result.setLen(bytesCount)
 
-method writeUnlocked(self: AsyncFile, data: string, cancelFut: Future[void]): Future[int]  {.async.} =
+method writeUnlocked(self: AsyncFile, data: string, cancelFut: Future[
+        void]): Future[int] {.async.} =
     if await self.writeSelect().wait(any(cancelFut, self.cancelled)):
         let bytesCount = posix.write(self.fd, addr(data[0]), data.len())
         if bytesCount == -1:

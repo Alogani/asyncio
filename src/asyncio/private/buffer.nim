@@ -42,7 +42,7 @@ proc read*(self: Buffer, count: int): string =
             data.setLen(count)
             result.add(move(data))
             break
-    self.searchNLPos = max(0, self.searchNLPos - lenBefore + self.queue.len()) 
+    self.searchNLPos = max(0, self.searchNLPos - lenBefore + self.queue.len())
 
 proc readLine*(self: Buffer, keepNewLine = false): string =
     ## Don't return if newline not found
