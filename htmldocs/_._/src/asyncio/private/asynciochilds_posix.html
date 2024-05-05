@@ -66,9 +66,9 @@
   <details open>
     <summary><a class="reference reference-toplevel" href="#9" id="59">Lets</a></summary>
     <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#stderrAsync" title="stderrAsync = new(AsyncFile, 2)">stderrAsync</a></li>
-<li><a class="reference" href="#stdinAsync" title="stdinAsync = new(AsyncFile, 0)">stdinAsync</a></li>
-<li><a class="reference" href="#stdoutAsync" title="stdoutAsync = new(AsyncFile, 1)">stdoutAsync</a></li>
+      <li><a class="reference" href="#stderrAsync" title="stderrAsync = new(AsyncFile, 2, fmReadWrite)">stderrAsync</a></li>
+<li><a class="reference" href="#stdinAsync" title="stdinAsync = new(AsyncFile, 0, fmReadWrite)">stdinAsync</a></li>
+<li><a class="reference" href="#stdoutAsync" title="stdoutAsync = new(AsyncFile, 1, fmReadWrite)">stdoutAsync</a></li>
 
     </ul>
   </details>
@@ -78,8 +78,8 @@
     <summary><a class="reference reference-toplevel" href="#12" id="62">Procs</a></summary>
     <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">new
-  <li><a class="reference" href="#new%2CtypeAsyncFile%2CFileHandle" title="new(T: type AsyncFile; fd: FileHandle): T:type">new(T: type AsyncFile; fd: FileHandle): T:type</a></li>
-<li><a class="reference" href="#new%2CtypeAsyncFile%2CFile" title="new(T: type AsyncFile; file: File): T:type">new(T: type AsyncFile; file: File): T:type</a></li>
+  <li><a class="reference" href="#new%2CtypeAsyncFile%2CFileHandle" title="new(T: type AsyncFile; fd: FileHandle; direction = fmReadWrite): T:type">new(T: type AsyncFile; fd: FileHandle; direction = fmReadWrite): T:type</a></li>
+<li><a class="reference" href="#new%2CtypeAsyncFile%2CFile" title="new(T: type AsyncFile; file: File; direction = fmReadWrite): T:type">new(T: type AsyncFile; file: File; direction = fmReadWrite): T:type</a></li>
 <li><a class="reference" href="#new%2CtypeAsyncFile%2Cstring" title="new(T: type AsyncFile; path: string; mode = fmRead): T:type">new(T: type AsyncFile; path: string; mode = fmRead): T:type</a></li>
 <li><a class="reference" href="#new%2CtypeAsyncPipe" title="new(T: type AsyncPipe): T:type">new(T: type AsyncPipe): T:type</a></li>
 
@@ -105,7 +105,7 @@
 
   </div>
   <div class="nine columns" id="content">
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L1" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L1" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
 <a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L1" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
     <div id="tocRoot"></div>
@@ -128,7 +128,7 @@
   <dd>
     
     An AsyncFile implementation close to C methods
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L8" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L8" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
 <a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L8" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
@@ -138,7 +138,7 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L17" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L17" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
 <a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L17" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
@@ -150,32 +150,32 @@
   <h1><a class="toc-backref" href="#9">Lets</a></h1>
   <dl class="item">
     <div id="stderrAsync">
-  <dt><pre><a href="asynciochilds_posix.html#stderrAsync"><span class="Identifier">stderrAsync</span></a> <span class="Other">=</span> <span class="Identifier">new</span><span class="Other">(</span><a href="asynciochilds_posix.html#AsyncFile"><span class="Identifier">AsyncFile</span></a><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">)</span></pre></dt>
+  <dt><pre><a href="asynciochilds_posix.html#stderrAsync"><span class="Identifier">stderrAsync</span></a> <span class="Other">=</span> <span class="Identifier">new</span><span class="Other">(</span><a href="asynciochilds_posix.html#AsyncFile"><span class="Identifier">AsyncFile</span></a><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="Identifier">fmReadWrite</span><span class="Other">)</span></pre></dt>
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L23" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L23" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L24" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L24" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="stdinAsync">
-  <dt><pre><a href="asynciochilds_posix.html#stdinAsync"><span class="Identifier">stdinAsync</span></a> <span class="Other">=</span> <span class="Identifier">new</span><span class="Other">(</span><a href="asynciochilds_posix.html#AsyncFile"><span class="Identifier">AsyncFile</span></a><span class="Other">,</span> <span class="DecNumber">0</span><span class="Other">)</span></pre></dt>
+  <dt><pre><a href="asynciochilds_posix.html#stdinAsync"><span class="Identifier">stdinAsync</span></a> <span class="Other">=</span> <span class="Identifier">new</span><span class="Other">(</span><a href="asynciochilds_posix.html#AsyncFile"><span class="Identifier">AsyncFile</span></a><span class="Other">,</span> <span class="DecNumber">0</span><span class="Other">,</span> <span class="Identifier">fmReadWrite</span><span class="Other">)</span></pre></dt>
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L21" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L21" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L22" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L22" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="stdoutAsync">
-  <dt><pre><a href="asynciochilds_posix.html#stdoutAsync"><span class="Identifier">stdoutAsync</span></a> <span class="Other">=</span> <span class="Identifier">new</span><span class="Other">(</span><a href="asynciochilds_posix.html#AsyncFile"><span class="Identifier">AsyncFile</span></a><span class="Other">,</span> <span class="DecNumber">1</span><span class="Other">)</span></pre></dt>
+  <dt><pre><a href="asynciochilds_posix.html#stdoutAsync"><span class="Identifier">stdoutAsync</span></a> <span class="Other">=</span> <span class="Identifier">new</span><span class="Other">(</span><a href="asynciochilds_posix.html#AsyncFile"><span class="Identifier">AsyncFile</span></a><span class="Other">,</span> <span class="DecNumber">1</span><span class="Other">,</span> <span class="Identifier">fmReadWrite</span><span class="Other">)</span></pre></dt>
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L22" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L22" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L23" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L23" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -187,22 +187,22 @@
   <dl class="item">
     <div id="new-procs-all">
   <div id="new,typeAsyncFile,FileHandle">
-  <dt><pre><span class="Keyword">proc</span> <a href="#new%2CtypeAsyncFile%2CFileHandle"><span class="Identifier">new</span></a><span class="Other">(</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">type</span> <span class="Identifier">AsyncFile</span><span class="Other">;</span> <span class="Identifier">fd</span><span class="Other">:</span> <span class="Identifier">FileHandle</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T:type</span></pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#new%2CtypeAsyncFile%2CFileHandle"><span class="Identifier">new</span></a><span class="Other">(</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">type</span> <span class="Identifier">AsyncFile</span><span class="Other">;</span> <span class="Identifier">fd</span><span class="Other">:</span> <span class="Identifier">FileHandle</span><span class="Other">;</span> <span class="Identifier">direction</span> <span class="Other">=</span> <span class="Identifier">fmReadWrite</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T:type</span></pre></dt>
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L19" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L19" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L20" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L20" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="new,typeAsyncFile,File">
-  <dt><pre><span class="Keyword">proc</span> <a href="#new%2CtypeAsyncFile%2CFile"><span class="Identifier">new</span></a><span class="Other">(</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">type</span> <span class="Identifier">AsyncFile</span><span class="Other">;</span> <span class="Identifier">file</span><span class="Other">:</span> <span class="Identifier">File</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T:type</span></pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#new%2CtypeAsyncFile%2CFile"><span class="Identifier">new</span></a><span class="Other">(</span><span class="Identifier">T</span><span class="Other">:</span> <span class="Keyword">type</span> <span class="Identifier">AsyncFile</span><span class="Other">;</span> <span class="Identifier">file</span><span class="Other">:</span> <span class="Identifier">File</span><span class="Other">;</span> <span class="Identifier">direction</span> <span class="Other">=</span> <span class="Identifier">fmReadWrite</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T:type</span></pre></dt>
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L43" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L43" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L59" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L59" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -211,8 +211,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L46" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L46" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L62" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L62" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -221,8 +221,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L49" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L49" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L65" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L65" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -234,8 +234,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L72" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L72" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L82" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L82" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -250,8 +250,8 @@
     <p>This is equivalent to a soft close</p>
 <p>This means, it will considered as closed when trying to read/write to it, but the underlying file descriptor will still be open</p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L89" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L89" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L93" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L93" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -263,8 +263,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/private/asynciochilds_posix.nim#L125" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L125" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/private/asynciochilds_posix.nim#L129" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/private/asynciochilds_posix.nim#L129" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -280,7 +280,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-04 09:13:05 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-05 08:58:29 UTC</small>
       </div>
     </div>
   </div>

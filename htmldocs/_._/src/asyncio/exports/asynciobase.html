@@ -61,7 +61,7 @@
     <summary><a class="reference reference-toplevel" href="#12" id="62">Procs</a></summary>
     <ul class="simple simple-toc-section">
       <ul class="simple nested-toc-section">cancelAll
-  <li><a class="reference" href="#cancelAll%2CAsyncIoBase" title="cancelAll(self: AsyncIoBase)">cancelAll(self: AsyncIoBase)</a></li>
+  <li><a class="reference" href="#cancelAll%2CAsyncIoBase" title="cancelAll(self: AsyncIoBase): owned(Future[void])">cancelAll(self: AsyncIoBase): owned(Future[void])</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">clear
@@ -137,7 +137,7 @@
 
   </div>
   <div class="nine columns" id="content">
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L1" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L1" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
 <a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L1" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
     <div id="tocRoot"></div>
@@ -152,8 +152,8 @@
   <dd>
     
     Base type for all AsyncIo objects Define all methods and handle locks
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L7" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L7" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L6" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L6" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -165,15 +165,15 @@
   <dl class="item">
     <div id="cancelAll-procs-all">
   <div id="cancelAll,AsyncIoBase">
-  <dt><pre><span class="Keyword">proc</span> <a href="#cancelAll%2CAsyncIoBase"><span class="Identifier">cancelAll</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">]</span><span class="Other">,</span>
-                                    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#cancelAll%2CAsyncIoBase"><span class="Identifier">cancelAll</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">owned</span><span class="Other">(</span><span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     <p>Kick out all pending readers and writers</p>
 <p>The consequence for readers and writers are the same as if they would have used <tt class="docutils literal"><span class="pre"><span class="Identifier">read</span><span class="Punctuation">(</span><span class="Operator">...</span><span class="Punctuation">,</span> <span class="Identifier">cancelFut</span><span class="Punctuation">)</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">write</span><span class="Punctuation">(</span><span class="Operator">...</span><span class="Punctuation">,</span> <span class="Identifier">cancelFut</span><span class="Punctuation">)</span></span></tt></p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L138" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L138" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L137" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L137" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -182,13 +182,12 @@
 <div id="clear-procs-all">
   <div id="clear,AsyncIoBase">
   <dt><pre><span class="Keyword">proc</span> <a href="#clear%2CAsyncIoBase"><span class="Identifier">clear</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciobase.html#AsyncIoBase"><span class="Identifier">AsyncIoBase</span></a><span class="Other">;</span> <span class="Identifier">cancelFut</span> <span class="Other">=</span> <span class="Identifier">sleepAsync</span><span class="Other">(</span><span class="DecNumber">5</span><span class="Other">)</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">owned</span><span class="Other">(</span><span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span><span class="Other">)</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">TimeEffect</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Execute cancelAll, then read all available data By default, use a minimal timer to know when data is fully read
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L156" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L156" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L155" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L155" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -200,8 +199,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L40" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L40" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L39" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L39" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -217,8 +216,8 @@
     <p>Await the data read len is count</p>
 <p>If cancelled was triggered, no attempt to read data is made and an empty string is returned. If cancelled is triggered during read, all available read data is returned (can be an empty string)</p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L91" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L91" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L90" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L90" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -232,8 +231,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L120" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L120" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L119" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L119" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -250,8 +249,8 @@
     <p>Await at least one byte is available. So read can be from 1 byte to <tt class="docutils literal"><span class="pre"><span class="Identifier">count</span></span></tt></p>
 <p>If cancelled is triggered during read, an empty string is returned</p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L99" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L99" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L98" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L98" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -267,8 +266,8 @@
     <p>Await at least one byte is available. Try to read a big chunk of data to optimize speed</p>
 <p>The exact size is implementation specific and can vary between objects</p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L106" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L106" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L105" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L105" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -285,8 +284,8 @@
     <p>Attempt to read up to a newline or to the end of stream</p>
 <p>newline can be kept if <tt class="docutils literal"><span class="pre"><span class="Identifier">keepNewLine</span></span></tt> is set to true, which can be used to distinguish when end of stream is reached</p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L113" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L113" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L112" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L112" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -300,8 +299,8 @@
   <dd>
     
     Transfer read from src immediatly to dest using readChunk Returns a future when completed If <tt class="docutils literal"><span class="pre"><span class="Identifier">flushAndCloseAfter</span></span></tt> is set to true, src will be cleared then closed when transfer is over
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L164" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L164" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L163" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L163" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -317,8 +316,8 @@
     <p>Await write is available and write to it</p>
 <p>Number of bytes written is returned and can be inferior to <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span><span class="Operator">.</span><span class="Identifier">len</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt></p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L124" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L124" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L123" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L123" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -333,8 +332,8 @@
     <p>Await write is available and write to it</p>
 <p>Number of bytes can be inferior to <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span><span class="Operator">.</span><span class="Identifier">len</span><span class="Punctuation">(</span><span class="Punctuation">)</span></span></tt></p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L131" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L131" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L130" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L130" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -353,8 +352,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.5.0/src/asyncio/exports/asynciobase.nim#L50" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L50" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciobase.nim#L49" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciobase.nim#L49" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -370,7 +369,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-04 09:13:05 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-05 08:58:29 UTC</small>
       </div>
     </div>
   </div>
