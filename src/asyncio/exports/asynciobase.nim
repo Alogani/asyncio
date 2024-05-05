@@ -134,7 +134,7 @@ proc writeDiscard*(self: AsyncIoBase, data: string, cancelFut: Future[void] = ni
     cast[Future[void]](self.write(data, cancelFut))
 
 
-proc cancelAll*(self: AsyncIoBase) =
+proc cancelAll*(self: AsyncIoBase) {.async.} =
     ## Kick out all pending readers and writers
     ## 
     ## The consequence for readers and writers are the same as if they would have used `read(..., cancelFut)` or `write(..., cancelFut)`
@@ -144,18 +144,18 @@ proc cancelAll*(self: AsyncIoBase) =
     (self.writeLock != nil and self.writeLock.locked):
         self.cancelled.trigger()
         if self.readLock != nil:
-            waitFor self.readLock.acquire()
+            await self.readLock.acquire()
             self.readLock.release()
         if self.writeLock != nil:
             self.writeLock.release()
-            waitFor self.writeLock.acquire()
+            await self.writeLock.acquire()
         if not self.isClosed:
             self.cancelled.clear()
 
 proc clear*(self: AsyncIoBase, cancelFut = sleepAsync(ClearWaitMS)) {.async.} =
     ## Execute cancelAll, then read all available data
     ## By default, use a minimal timer to know when data is fully read
-    self.cancelAll()
+    await self.cancelAll()
     while true:
         if await(self.readChunk(cancelFut)) == "":
             break
