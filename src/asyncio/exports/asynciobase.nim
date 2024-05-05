@@ -1,6 +1,5 @@
 import std/[asyncdispatch]
 import asyncsync, asyncsync/[lock, event]
-export asyncsync
 
 
 type

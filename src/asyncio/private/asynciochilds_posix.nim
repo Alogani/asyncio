@@ -1,7 +1,7 @@
 import ../exports/asynciobase {.all.}
 import ./asynctwoend
 
-import asyncsync, asyncsync/[lock, event, listener]
+import asyncsync, asyncsync/[event, lock, osevents]
 import std/[posix, os]
 
 type
@@ -11,12 +11,13 @@ type
         osError*: cint
         pollable: bool
         unregistered: bool
-        readListener: Listener
-        writeListener: Listener
+        readEvent: ReadEvent
+        writeEvent: WriteEvent
     
     AsyncPipe* = ref object of AsyncTwoEnd
 
-proc new*(T: type AsyncFile, fd: FileHandle): T
+
+proc new*(T: type AsyncFile, fd: FileHandle, direction = fmReadWrite): T
 let
     stdinAsync* = AsyncFile.new(STDIN_FILENO)
     stdoutAsync* = AsyncFile.new(STDOUT_FILENO)
@@ -29,22 +30,37 @@ proc isPollable(fd: cint): bool =
     discard fstat(fd, stat)
     not S_ISREG(stat.st_mode)
 
-proc new*(T: type AsyncFile, fd: FileHandle): T =
-    result = T(fd: fd, readListener: Listener.new(), writeListener: Listener.new())
+proc isReader(mode: FileMode): bool =
+    mode in [fmRead, fmReadWrite, fmReadWriteExisting]
+
+proc isWriter(mode: FileMode): bool =
+    mode in [fmWrite, fmReadWrite, fmReadWriteExisting, fmAppend]
+
+proc new*(T: type AsyncFile, fd: FileHandle, direction = fmReadWrite): T =
     if isPollable(fd):
-        result.pollable = true
+        result = T(
+            fd: fd,
+            pollable: true,
+            readEvent: if direction.isReader(): ReadEvent.new(fd) else: nil,
+            writeEvent: if direction.isWriter(): WriteEvent.new(fd) else: nil,
+        )
         AsyncFD(fd).register()
     else:
-        result.pollable = false
-        result.readListener.trigger()
-        result.writeListener.trigger()
-    result.init(Lock.new(), Lock.new())
+        result = T(
+            fd: fd,
+            pollable: false,
+        )
+    result.init(
+        # Read/Write locks
+        if direction.isReader(): Lock.new() else: nil,
+        if direction.isWriter(): Lock.new() else: nil,
+    )
 
-proc new*(T: type AsyncFile, file: File): T =
-    T.new(file.getOsFileHandle())
+proc new*(T: type AsyncFile, file: File, direction = fmReadWrite): T =
+    T.new(file.getOsFileHandle(), direction)
 
 proc new*(T: type AsyncFile, path: string, mode = fmRead): T =
-    T.new(open(path, mode))
+    T.new(open(path, mode), mode)
 
 proc new*(T: type AsyncPipe): T =
     var pipesArr: array[2, cint]
@@ -52,39 +68,27 @@ proc new*(T: type AsyncPipe): T =
         raiseOSError(osLastError())
     result = T()
     result.init(
-        reader = AsyncFile.new(pipesArr[0]),
-        writer = AsyncFile.new(pipesArr[1])
+        reader = AsyncFile.new(pipesArr[0], fmRead),
+        writer = AsyncFile.new(pipesArr[1], fmWrite)
     )
 
 proc readSelect(self: AsyncFile): Future[void] =
-    result = self.readListener.wait()
-    if not self.pollable or self.readListener.listening:
-        return
-    if bool(self.cancelled):
-        self.readListener.trigger()
-        return
-    self.readListener.clear()
-    proc cb(fd: AsyncFD): bool {.closure gcsafe.} =
-        self.readListener.trigger()
-        true
-    AsyncFD(self.fd).addRead(cb)
+    if not self.pollable:
+        let fut = newFuture[void]()
+        fut.complete()
+        return fut
+    return self.readEvent.getFuture()
 
 proc reader*(self: AsyncPipe): Asyncfile =
     (procCall self.AsyncTwoEnd.reader()).Asyncfile
 
 
 proc writeSelect(self: AsyncFile): Future[void] =
-    result = self.writeListener.wait()
-    if not self.pollable or self.writeListener.listening:
-        return
-    if bool(self.cancelled):
-        self.writeListener.trigger()
-        return
-    self.writeListener.clear()
-    proc cb(fd: AsyncFD): bool {.closure gcsafe.}  =
-        self.writeListener.trigger()
-        true
-    AsyncFD(self.fd).addWrite(cb)
+    if not self.pollable:
+        let fut = newFuture[void]()
+        fut.complete()
+        return fut
+    return self.writeEvent.getFuture()
 
 proc unregister*(self: AsyncFile) =
     ## This is equivalent to a soft close
@@ -104,7 +108,7 @@ method close(self: AsyncFile) =
         discard self.fd.close()
 
 method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[void]): Future[string] {.async.} =
-    if await checkWithCancel(self.readSelect(), any(cancelFut, self.cancelled)):
+    if await self.readSelect().wait(any(cancelFut, self.cancelled)):
         result = newString(count)
         let bytesCount = posix.read(self.fd, addr(result[0]), count)
         if bytesCount == -1:
@@ -114,7 +118,7 @@ method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[void
             result.setLen(bytesCount)
 
 method writeUnlocked(self: AsyncFile, data: string, cancelFut: Future[void]): Future[int]  {.async.} =
-    if await checkWithCancel(self.writeSelect(), any(cancelFut, self.cancelled)):
+    if await self.writeSelect().wait(any(cancelFut, self.cancelled)):
         let bytesCount = posix.write(self.fd, addr(data[0]), data.len())
         if bytesCount == -1:
             self.osError = errno
