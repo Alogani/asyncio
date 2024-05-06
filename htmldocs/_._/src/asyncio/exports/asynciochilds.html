@@ -120,6 +120,18 @@
   <li><a class="reference" href="#reader%2CAsyncStream" title="reader(self: AsyncStream): AsyncStreamReader">reader(self: AsyncStream): AsyncStreamReader</a></li>
 
 </ul>
+<ul class="simple nested-toc-section">setBufferInNormalMode
+  <li><a class="reference" href="#setBufferInNormalMode%2CAsyncBuffer" title="setBufferInNormalMode(self: AsyncBuffer)">setBufferInNormalMode(self: AsyncBuffer)</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">setBufferInPassthroughMode
+  <li><a class="reference" href="#setBufferInPassthroughMode%2CAsyncBuffer" title="setBufferInPassthroughMode(self: AsyncBuffer): owned(Future[void])">setBufferInPassthroughMode(self: AsyncBuffer): owned(Future[void])</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">setBufferInUnboundMode
+  <li><a class="reference" href="#setBufferInUnboundMode%2CAsyncBuffer" title="setBufferInUnboundMode(self: AsyncBuffer)">setBufferInUnboundMode(self: AsyncBuffer)</a></li>
+
+</ul>
 <ul class="simple nested-toc-section">writer
   <li><a class="reference" href="#writer%2CAsyncStream" title="writer(self: AsyncStream): AsyncStreamWriter">writer(self: AsyncStream): AsyncStreamWriter</a></li>
 
@@ -136,7 +148,7 @@
 
   </div>
   <div class="nine columns" id="content">
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L1" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L1" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
 <a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L1" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
     <div id="tocRoot"></div>
@@ -158,8 +170,8 @@
   <dd>
     
     An object that allow to bufferize other AsyncIoBase objects. Slower for local files
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L19" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L19" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L25" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L25" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -169,8 +181,8 @@
   <dd>
     
     An object that allows to read each stream one after another in order
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L28" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L28" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L35" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L35" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -180,8 +192,8 @@
   <dd>
     
     An object that permits to add a delay before each read or write is executed
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L32" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L32" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L39" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L39" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -193,8 +205,8 @@
     <p>An in-memory async buffer</p>
 <p>Because it is async (read pending for data), it can be highly subjects to deadlocks. To avoid deadlocks: ensure to a least close writer when finished. Not thread safe</p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L37" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L37" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L44" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L44" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -204,8 +216,8 @@
   <dd>
     
     Reader object of AsyncStream. Can't be instantiated directly
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L44" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L44" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L51" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L51" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -215,8 +227,8 @@
   <dd>
     
     Writer object of AsyncStream. Can't be instantiated directly
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L50" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L50" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L57" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L57" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -228,8 +240,8 @@
     <p>Immutable async stream/buffer, that can only be written at instantiation</p>
 <p>No deadlock is possible</p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L56" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L56" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L63" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L63" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -241,8 +253,8 @@
     <p>Object that allows to clone/tee data when reading it</p>
 <p>Meaning that reading from it will both read (and return) from underlying reader, and write the data to the underlying writer</p>
 
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L61" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L61" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L68" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L68" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -253,8 +265,8 @@
   <dd>
     
     Object that allows to clone data written to it to multiple writers
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L68" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L68" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L75" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L75" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -264,8 +276,8 @@
   <dd>
     
     Does nothing and can only be written to. Equivalent of a /dev/null, write to it will do nothing
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L72" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L72" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L79" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L79" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -280,7 +292,7 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L16" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L16" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
 <a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L16" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
@@ -298,8 +310,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L77" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L77" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L84" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L84" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -312,8 +324,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L84" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L84" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L91" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L91" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -322,8 +334,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L87" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L87" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L94" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L94" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -332,8 +344,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L90" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L90" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L97" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L97" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -342,8 +354,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L93" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L93" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L100" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L100" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -356,9 +368,9 @@
            <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Equivalent to a read but instead of returning data, keep it in its internal memory
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L101" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L101" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    Fill the read Buffer. Equivalent to a read but instead of returning data, keep it in its internal memory
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L111" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L111" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -367,12 +379,12 @@
 <div id="flush-procs-all">
   <div id="flush,AsyncBuffer,Future[void]">
   <dt><pre><span class="Keyword">proc</span> <a href="#flush%2CAsyncBuffer%2CFuture%5Bvoid%5D"><span class="Identifier">flush</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciochilds.html#AsyncBuffer"><span class="Identifier">AsyncBuffer</span></a><span class="Other">;</span> <span class="Identifier">cancelFut</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span> {.
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    Empty all data in the internal memory. it doesn't flush the wrapped stream
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L106" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L106" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    Empty all data in the internal memory (from write buffer). it doesn't flush the wrapped stream
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L118" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L118" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -385,8 +397,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L112" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L112" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L126" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L126" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -396,8 +408,8 @@
   <dd>
     
     Create a new AsyncBuffer.
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L115" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L115" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L130" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L130" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -406,8 +418,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L123" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L123" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L139" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L139" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -416,8 +428,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L130" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L130" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L146" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L146" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -426,8 +438,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L142" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L142" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L160" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L160" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -436,8 +448,8 @@
   <dd>
     
     The stream can only be filled using <tt class="docutils literal"><span class="pre"><span class="Identifier">data</span></span></tt> argument
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L153" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L153" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L171" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L171" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -446,8 +458,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L161" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L161" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L179" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L179" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -456,8 +468,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L165" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L165" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L183" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L183" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -466,8 +478,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L172" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L172" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L190" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L190" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -480,8 +492,50 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L176" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L176" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L194" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L194" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
+
+</div>
+<div id="setBufferInNormalMode-procs-all">
+  <div id="setBufferInNormalMode,AsyncBuffer">
+  <dt><pre><span class="Keyword">proc</span> <a href="#setBufferInNormalMode%2CAsyncBuffer"><span class="Identifier">setBufferInNormalMode</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciochilds.html#AsyncBuffer"><span class="Identifier">AsyncBuffer</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Restore the original mode
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L197" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L197" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
+
+</div>
+<div id="setBufferInPassthroughMode-procs-all">
+  <div id="setBufferInPassthroughMode,AsyncBuffer">
+  <dt><pre><span class="Keyword">proc</span> <a href="#setBufferInPassthroughMode%2CAsyncBuffer"><span class="Identifier">setBufferInPassthroughMode</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciochilds.html#AsyncBuffer"><span class="Identifier">AsyncBuffer</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">owned</span><span class="Other">(</span><span class="Identifier">Future</span><span class="Other">[</span><span class="Identifier">void</span><span class="Other">]</span><span class="Other">)</span> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">stackTrace</span><span class="Other">:</span> <span class="DecNumber">false</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Side effect: flush the write buffer The readbuffer might still contain data that should be emptied with a read
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L201" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L201" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
+
+</div>
+<div id="setBufferInUnboundMode-procs-all">
+  <div id="setBufferInUnboundMode,AsyncBuffer">
+  <dt><pre><span class="Keyword">proc</span> <a href="#setBufferInUnboundMode%2CAsyncBuffer"><span class="Identifier">setBufferInUnboundMode</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="asynciochilds.html#AsyncBuffer"><span class="Identifier">AsyncBuffer</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Dont affect pending reads/write
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L208" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L208" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -494,8 +548,8 @@
   <dd>
     
     
-    <a href="https://github.com/Alogani/asyncio/tree/v0.6.0/src/asyncio/exports/asynciochilds.nim#L179" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L179" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/Alogani/asyncio/tree/v0.6.1/src/asyncio/exports/asynciochilds.nim#L212" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/Alogani/asyncio/edit/devel/src/asyncio/exports/asynciochilds.nim#L212" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -517,7 +571,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-05 10:28:57 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-05-06 05:22:00 UTC</small>
       </div>
     </div>
   </div>

@@ -10,5 +10,5 @@ nim	new	_._/src/asyncio/private/asynciochilds_posix.html#new,typeAsyncFile,strin
 nim	new	_._/src/asyncio/private/asynciochilds_posix.html#new,typeAsyncPipe	proc new(T: type AsyncPipe): T:type		65
 nim	reader	_._/src/asyncio/private/asynciochilds_posix.html#reader,AsyncPipe	proc reader(self: AsyncPipe): AsyncFile		82
 nim	unregister	_._/src/asyncio/private/asynciochilds_posix.html#unregister,AsyncFile	proc unregister(self: AsyncFile)		93
-nim	writer	_._/src/asyncio/private/asynciochilds_posix.html#writer,AsyncPipe	proc writer(self: AsyncPipe): AsyncFile		129
+nim	writer	_._/src/asyncio/private/asynciochilds_posix.html#writer,AsyncPipe	proc writer(self: AsyncPipe): AsyncFile		131
 nimgrp	new	_._/src/asyncio/private/asynciochilds_posix.html#new-procs-all	proc		20
