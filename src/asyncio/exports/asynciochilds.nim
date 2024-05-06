@@ -16,6 +16,12 @@ else:
 const defaultAsyncBufferSize* = 1024
 
 type
+    AsyncBufferMode = enum
+        ## In Passthrough, the data is not buffered and immediatly transfer to underlying stream
+        ## In Unbound, the buffer is never flushed.
+        ## In Normal, the readBufSize and writeBufSize are normally used
+        Normal, Passthrough, Unbound
+    
     AsyncBuffer* = ref object of AsyncIoBase
         ## An object that allow to bufferize other AsyncIoBase objects.
         ## Slower for local files
@@ -24,6 +30,7 @@ type
         readBufSize: int
         writeBuffer: Buffer
         writeBufSize: int
+        mode = Normal
 
     AsyncChainReader* = ref object of AsyncIoBase
         ## An object that allows to read each stream one after another in order
@@ -102,15 +109,19 @@ proc fillBufferUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[
 
 proc fillBuffer*(self: AsyncBuffer, count: int = 0, cancelFut: Future[
         void] = nil): Future[int] {.async.} =
-    ## Equivalent to a read but instead of returning data, keep it in its internal memory
+    ## Fill the read Buffer. Equivalent to a read but instead of returning data, keep it in its internal memory
+    if self.mode == Passthrough:
+        return
     withLock self.readLock:
         return await self.fillBufferUnlocked(count, cancelFut)
 
 proc flush*(self: AsyncBuffer, cancelFut: Future[void] = nil): Future[int] =
-    ## Empty all data in the internal memory. it doesn't flush the wrapped stream
-    var data = self.readBuffer.readAll()
-    if data.len() != 0:
-        return self.stream.write(data, cancelFut)
+    ## Empty all data in the internal memory (from write buffer). it doesn't flush the wrapped stream
+    if self.mode == Unbound or self.writeBuffer.isEmpty():
+        var resFuture = newFuture[int]()
+        resFuture.complete(0)
+        return resFuture
+    return self.stream.write(self.writeBuffer.readAll(), cancelFut)
 
 proc new*(T: type AsyncBuffer, stream: AsyncIoBase,
         bufSize = defaultAsyncBufferSize): T =
@@ -183,6 +194,21 @@ proc new*(T: type AsyncVoid): T =
 proc reader*(self: AsyncStream): AsyncStreamReader =
     (procCall self.AsyncTwoEnd.reader()).AsyncStreamReader
 
+proc setBufferInNormalMode*(self: AsyncBuffer) =
+    ## Restore the original mode
+    self.mode = Normal
+
+proc setBufferInPassthroughMode*(self: AsyncBuffer) {.async.} =
+    ## Side effect: flush the write buffer
+    ## The readbuffer might still contain data that should be emptied with a read
+    self.mode = Passthrough
+    if not self.writeBuffer.isEmpty():
+        discard await self.stream.write(self.writeBuffer.readAll())
+
+proc setBufferInUnboundMode*(self: AsyncBuffer) =
+    ## Dont affect pending reads/write
+    self.mode = Unbound
+
 proc writer*(self: AsyncStream): AsyncStreamWriter =
     (procCall self.AsyncTwoEnd.writer()).AsyncStreamWriter
 
@@ -230,9 +256,25 @@ method close(self: AsyncVoid) =
 
 method readAvailableUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[
         void]): Future[string] {.async.} =
-    if self.readBuffer.len() < count:
-        discard await self.fillBufferUnlocked(max(count, self.readBufSize), cancelFut)
-    return self.readBuffer.read(count)
+    if self.mode == Passthrough:
+        if self.readBuffer.isEmpty():
+            await self.stream.readUnlocked(count, cancelFut)
+        else:
+            var data = self.readBuffer.read(count)
+            if count - data.len() > 0:
+                data.add await self.stream.readUnlocked(count - data.len(), cancelFut)
+            data
+    elif self.mode == Unbound:
+        self.readBuffer.read(count)
+    elif count > self.readBufSize + self.readBuffer.len():
+        ## Optimization to avoid unecessary copy
+        var data = self.readBuffer.readAll()
+        data.add await self.stream.readUnlocked(count - data.len(), cancelFut)
+        data
+    else:
+        if self.readBuffer.len() < count:
+            discard await self.fillBufferUnlocked(self.readBufSize, cancelFut)
+        self.readBuffer.read(count)
 
 method readAvailableUnlocked(self: AsyncChainReader, count: int,
         cancelFut: Future[void]): Future[string] {.async.} =
@@ -270,9 +312,11 @@ method readAvailableUnlocked(self: AsyncTeeReader, count: int,
 method readChunkUnlocked(self: AsyncBuffer, cancelFut: Future[void]): Future[
         string] {.async.} =
     if self.readBuffer.isEmpty():
-        return await self.stream.readUnlocked(self.readBufSize, cancelFut)
+        await self.stream.readUnlocked(self.readBufSize, cancelFut)
+    elif self.mode == Unbound:
+        ""
     else:
-        return self.readBuffer.readChunk()
+        self.readBuffer.readChunk()
 
 method readChunkUnlocked(self: AsyncChainReader, cancelFut: Future[
         void]): Future[string] {.async.} =
@@ -312,11 +356,22 @@ method readChunkUnlocked(self: AsyncTeeReader, cancelFut: Future[void]): Future[
 method writeUnlocked(self: AsyncBuffer, data: string, cancelFut: Future[
         void]): Future[int] {.async.} =
     let dataLen = data.len()
-    self.writeBuffer.write(data)
-    if self.writeBuffer.len() >= self.writeBufSize:
-        return await self.stream.writeUnlocked(self.writeBuffer.readAll(), cancelFut)
+    if self.mode == Passthrough:
+        await self.stream.writeUnlocked(data, cancelFut)
+    elif self.mode == Unbound:
+        self.writeBuffer.write(data)
+        data.len()
+    elif dataLen > self.writeBuffer.len() + self.writeBufSize:
+        ## Optimization to avoid unecessary copy
+        var count = await self.stream.writeUnlocked(self.writeBuffer.readAll(), cancelFut)
+        count += await self.stream.writeUnlocked(data, cancelFut)
+        count
     else:
-        return dataLen
+        self.writeBuffer.write(data)
+        if self.writeBuffer.len() >= self.writeBufSize:
+            await self.stream.writeUnlocked(self.writeBuffer.readAll(), cancelFut)
+        else:
+            dataLen
 
 method writeUnlocked(self: AsyncIoDelayed, data: string, cancelFut: Future[
         void]): Future[int] {.async.} =

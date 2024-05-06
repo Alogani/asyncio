@@ -30,7 +30,7 @@ proc asyncTwoEndTester*[T: AsyncStream or AsyncPipe](name: string, OT: type T) =
         check (waitFor b.readAll()) == "data"
 
 proc main() {.async.} =
-    suite "Asyncbuffer":
+    suite "Asyncbuffer in normal mode":
         const bufSize = 100
         var
             unbufferedStream = AsyncStream.new()
@@ -49,12 +49,12 @@ proc main() {.async.} =
             check unbufferedStream.bufLen() == 250
             check bufferedStream.bufLen() == (0, 0)
 
-        test "Read on empty buffer":
+        test "Small read on empty buffer":
             check "A".repeat(10) == (await bufferedStream.read(10))
             check unbufferedStream.bufLen() == 150
             check bufferedStream.bufLen() == (bufSize - 10, 0)
 
-        test "Read on non empty buffer":
+        test "Small read on non empty buffer":
             check "A".repeat(10) == (await bufferedStream.read(10))
             check unbufferedStream.bufLen() == 150
             check bufferedStream.bufLen() == (bufSize - 10 * 2, 0)
@@ -71,6 +71,40 @@ proc main() {.async.} =
             check unbufferedStream.bufLen() == 250
             check bufferedStream.bufLen() == (90, 0)
             check "A".repeat(340) == (await bufferedStream.readAll())
+
+    suite "Asyncbuffer in custom modes":
+        const bufSize = 100
+        var
+            unbufferedStream = AsyncStream.new()
+            bufferedStream = AsyncBuffer.new(unbufferedStream, bufSize)
+
+        test "Passthrough Buffer: Write less than buffer":
+            await bufferedStream.setBufferInPassthroughMode()
+            discard await bufferedStream.write("A".repeat(50))
+            check unbufferedStream.bufLen() == 50
+            check bufferedStream.bufLen() == (0, 0)
+        
+        test "Passthrough Buffer: Small read buffer":
+            check "A".repeat(10) == (await bufferedStream.read(10))
+            check unbufferedStream.bufLen() == 40
+            check bufferedStream.bufLen() == (0, 0)
+
+        test "Restore in normal mode":
+            bufferedStream.setBufferInNormalMode()
+            discard await bufferedStream.fillBuffer(10)
+            check unbufferedStream.bufLen() == 30
+            check bufferedStream.bufLen() == (10, 0)
+
+        test "Unbound Buffer: Read":
+            bufferedStream.setBufferInUnboundMode()
+            check "A".repeat(10) == (await bufferedStream.read(20))
+            check unbufferedStream.bufLen() == 30
+            check bufferedStream.bufLen() == (0, 0)
+
+        test "Unbound Buffer: Write more than buffer":
+            discard await bufferedStream.write("A".repeat(200))
+            check unbufferedStream.bufLen() == 30
+            check bufferedStream.bufLen() == (0, 200)
 
     suite "AsyncChainReader with asyncstring":
         var stream = AsyncChainReader.new(
