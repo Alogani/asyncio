@@ -97,7 +97,8 @@ proc main() {.async.} =
 
         test "Unbound Buffer: Read":
             bufferedStream.setBufferInUnboundMode()
-            check "A".repeat(10) == (await bufferedStream.read(20))
+            ## Because we do not use readAvailable, we must manually stop it
+            check "A".repeat(10) == (await bufferedStream.read(20, sleepAsync(10)))
             check unbufferedStream.bufLen() == 30
             check bufferedStream.bufLen() == (0, 0)
 

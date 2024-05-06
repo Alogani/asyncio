@@ -17,9 +17,9 @@ const defaultAsyncBufferSize* = 1024
 
 type
     AsyncBufferMode = enum
-        ## In Passthrough, the data is not buffered and immediatly transfer to underlying stream
-        ## In Unbound, the buffer is never flushed.
-        ## In Normal, the readBufSize and writeBufSize are normally used
+        ## In Passthrough, the data is not buffered and immediatly transfer to underlying stream.
+        ## In Unbound, the buffer is never filled (on read -> warning: blocking behaviour if stream is empty) or flushed (write -W non blocking behaviour).
+        ## In Normal, the readBufSize and writeBufSize are normally used.
         Normal, Passthrough, Unbound
     
     AsyncBuffer* = ref object of AsyncIoBase
@@ -28,6 +28,7 @@ type
         stream*: AsyncIoBase
         readBuffer: Buffer
         readBufSize: int
+        readWaiter: Event # If stream is unbound, prevents it from returing EOF
         writeBuffer: Buffer
         writeBufSize: int
         mode = Normal
@@ -132,6 +133,7 @@ proc new*(T: type AsyncBuffer, stream: AsyncIoBase, readBufSize,
     ## Create a new AsyncBuffer.
     result = T(
         readBuffer: Buffer.new(), readBufSize: readBufSize,
+        readWaiter: Event.new(),
         writeBuffer: Buffer.new(), writeBufSize: writeBufSize,
         stream: stream)
     result.init(readLock = stream.readLock, writeLock = stream.writeLock)
@@ -197,17 +199,20 @@ proc reader*(self: AsyncStream): AsyncStreamReader =
 proc setBufferInNormalMode*(self: AsyncBuffer) =
     ## Restore the original mode
     self.mode = Normal
+    self.readWaiter.trigger()
 
 proc setBufferInPassthroughMode*(self: AsyncBuffer) {.async.} =
     ## Side effect: flush the write buffer
     ## The readbuffer might still contain data that should be emptied with a read
     self.mode = Passthrough
+    self.readWaiter.trigger()
     if not self.writeBuffer.isEmpty():
         discard await self.stream.write(self.writeBuffer.readAll())
 
 proc setBufferInUnboundMode*(self: AsyncBuffer) =
     ## Dont affect pending reads/write
     self.mode = Unbound
+    self.readWaiter.clear()
 
 proc writer*(self: AsyncStream): AsyncStreamWriter =
     (procCall self.AsyncTwoEnd.writer()).AsyncStreamWriter
@@ -265,7 +270,13 @@ method readAvailableUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[
                 data.add await self.stream.readUnlocked(count - data.len(), cancelFut)
             data
     elif self.mode == Unbound:
-        self.readBuffer.read(count)
+        if self.readBuffer.isEmpty():
+            if await self.readWaiter.wait(cancelFut):
+                await self.readAvailableUnlocked(count, cancelFut) # Try again
+            else:
+                ""
+        else:
+            self.readBuffer.read(count)
     elif count > self.readBufSize + self.readBuffer.len():
         ## Optimization to avoid unecessary copy
         var data = self.readBuffer.readAll()
@@ -312,9 +323,10 @@ method readAvailableUnlocked(self: AsyncTeeReader, count: int,
 method readChunkUnlocked(self: AsyncBuffer, cancelFut: Future[void]): Future[
         string] {.async.} =
     if self.readBuffer.isEmpty():
+        if self.mode == Unbound:
+            if not await self.readWaiter.wait(cancelFut):
+                return ""
         await self.stream.readUnlocked(self.readBufSize, cancelFut)
-    elif self.mode == Unbound:
-        ""
     else:
         self.readBuffer.readChunk()
 
