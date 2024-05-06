@@ -309,7 +309,7 @@ method readAvailableUnlocked(self: AsyncStreamReader, count: int,
     if self.closed:
         return
     if not self.writerClosed[]:
-        await any(self.hasData.wait(), cancelFut, self.cancelled)
+        await any(self.hasData, cancelFut, self.cancelled)
     result = self.buffer.read(count)
     if self.buffer.isEmpty():
         self.hasData.clear()
@@ -352,7 +352,7 @@ method readChunkUnlocked(self: AsyncStreamReader, cancelFut: Future[
     if self.closed:
         return
     if not self.writerClosed[]:
-        await any(self.hasData.wait(), cancelFut, self.cancelled)
+        await any(self.hasData, cancelFut, self.cancelled)
         result = self.buffer.readChunk()
         if self.buffer.isEmpty():
             self.hasData.clear()
