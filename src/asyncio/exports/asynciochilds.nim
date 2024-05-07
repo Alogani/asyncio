@@ -43,6 +43,12 @@ type
         stream: AsyncIoBase
         delayMs: float
 
+    AsyncSoftCloser* = ref object of AsyncIoBase
+        ## object that wraps a stream, act as closed when closed without closing the underlying stream
+        ## Not very useful apart from some corner cases
+        stream: AsyncIoBase
+        closeBehaviour: CloseBehaviour
+
     AsyncStream* = ref object of AsyncTwoEnd
         ## An in-memory async buffer
         ##
@@ -128,16 +134,17 @@ proc flush*(self: AsyncBuffer, cancelFut: Future[void] = nil): Future[int] =
 
 proc new*(T: type AsyncBuffer, stream: AsyncIoBase,
         bufSize = defaultAsyncBufferSize): T =
+    ## Create a new AsyncBuffer.
     return AsyncBuffer.new(stream, bufSize, bufSize)
 
 proc new*(T: type AsyncBuffer, stream: AsyncIoBase, readBufSize,
         writeBufSize: int): T =
-    ## Create a new AsyncBuffer.
     result = T(
         readBuffer: Buffer.new(), readBufSize: readBufSize,
         readWaiter: Event.new(),
         writeBuffer: Buffer.new(), writeBufSize: writeBufSize,
-        stream: stream)
+        stream: stream,
+    )
     result.init(readLock = stream.readLock, writeLock = stream.writeLock)
 
 proc new*(T: type AsyncChainReader, readers: varargs[AsyncIoBase]): T =
@@ -154,6 +161,11 @@ proc new*(T: type AsyncChainReader, readers: varargs[AsyncIoBase]): T =
 
 proc new*(T: type AsyncIoDelayed; stream: AsyncIoBase, delayMs: float): T =
     result = T(stream: stream, delayMs: delayMs)
+    result.init(readLock = stream.readLock, writeLock = stream.writeLock)
+
+proc new*(T: type AsyncSoftCloser; stream: AsyncIoBase, closeBehaviour = CloseBoth): T =
+    ## CloseBoth, CloseReader, CloseWriter have all same behaviour
+    result = T(stream: stream, closeBehaviour: closeBehaviour)
     result.init(readLock = stream.readLock, writeLock = stream.writeLock)
 
 proc new(T: type AsyncStreamReader, buffer: Buffer, hasData: Event,
@@ -191,10 +203,16 @@ proc new*(T: type AsyncTeeReader; reader: AsyncIoBase, writer: AsyncIoBase, clos
     result.init(readLock = reader.readLock, writeLock = nil)
 
 proc new*(T: type AsyncTeeWriter, writers: varargs[AsyncIoBase]): T =
-    result = T(writers: @writers)
+    result = T(
+        writers: newSeqOfCap[AsyncIoBase](writers.len()),
+    )
     var allWriteLocks = newSeqOfCap[Lock](writers.len())
-    for w in writers:
-        allWriteLocks.add(w.writeLock)
+    for writer in writers:
+        if writer of AsyncTeeWriter:
+            result.writers.add AsyncTeeWriter(writer).writers
+        else:
+            result.writers.add writer
+        allWriteLocks.add(writer.writeLock)
     result.init(readLock = nil, writeLock = allWriteLocks.merge())
 
 proc new*(T: type AsyncVoid): T =
@@ -241,6 +259,10 @@ method close(self: AsyncIoDelayed) =
     self.closed = true
     self.stream.close()
 
+method close(self: AsyncSoftCloser) =
+    self.cancelled.trigger()
+    self.closed = true
+
 method close(self: AsyncStreamReader) =
     self.buffer.clear()
     self.closed = true
@@ -273,29 +295,29 @@ method readAvailableUnlocked(self: AsyncBuffer, count: int, cancelFut: Future[
         void]): Future[string] {.async.} =
     if self.mode == Passthrough:
         if self.readBuffer.isEmpty():
-            await self.stream.readUnlocked(count, cancelFut)
+            return await self.stream.readUnlocked(count, cancelFut)
         else:
             var data = self.readBuffer.read(count)
             if count - data.len() > 0:
                 data.add await self.stream.readUnlocked(count - data.len(), cancelFut)
-            data
+            return data
     elif self.mode == Unbound:
         if self.readBuffer.isEmpty():
             if await self.readWaiter.wait(cancelFut):
-                await self.readAvailableUnlocked(count, cancelFut) # Try again
+                return await self.readAvailableUnlocked(count, cancelFut) # Try again
             else:
-                ""
+                return ""
         else:
-            self.readBuffer.read(count)
+            return self.readBuffer.read(count)
     elif count > self.readBufSize + self.readBuffer.len():
         ## Optimization to avoid unecessary copy
         var data = self.readBuffer.readAll()
         data.add await self.stream.readUnlocked(count - data.len(), cancelFut)
-        data
+        return data
     else:
         if self.readBuffer.len() < count:
             discard await self.fillBufferUnlocked(self.readBufSize, cancelFut)
-        self.readBuffer.read(count)
+        return self.readBuffer.read(count)
 
 method readAvailableUnlocked(self: AsyncChainReader, count: int,
         cancelFut: Future[void]): Future[string] {.async.} =
@@ -313,6 +335,10 @@ method readAvailableUnlocked(self: AsyncIoDelayed, count: int,
         cancelFut: Future[void]): Future[string] {.async.} =
     await sleepAsync(self.delayMs)
     return await self.stream.readAvailableUnlocked(count, cancelFut)
+
+method readAvailableUnlocked(self: AsyncSoftCloser, count: int,
+        cancelFut: Future[void]): Future[string] =
+    return self.stream.readAvailableUnlocked(count, cancelFut)
 
 method readAvailableUnlocked(self: AsyncStreamReader, count: int,
         cancelFut: Future[void]): Future[string] {.async.} =
@@ -399,6 +425,10 @@ method writeUnlocked(self: AsyncIoDelayed, data: string, cancelFut: Future[
         void]): Future[int] {.async.} =
     await sleepAsync(self.delayMs)
     return await self.stream.writeUnlocked(data, cancelFut)
+
+method writeUnlocked(self: AsyncSoftCloser, data: string, cancelFut: Future[
+        void]): Future[int] =
+    return self.stream.writeUnlocked(data, cancelFut)
 
 method writeUnlocked(self: AsyncStreamWriter, data: string, cancelFut: Future[
         void]): Future[int] {.async.} =
