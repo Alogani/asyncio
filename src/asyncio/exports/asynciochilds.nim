@@ -78,6 +78,7 @@ type
     AsyncTeeWriter* = ref object of AsyncIoBase
         ## Object that allows to clone data written to it to multiple writers
         writers*: seq[AsyncIoBase]
+        closeBehaviour: CloseBehaviour
 
     AsyncVoid* = ref object of AsyncIoBase
         ## Does nothing and can only be written to.
@@ -190,11 +191,19 @@ proc new*(T: type AsyncTeeReader; reader: AsyncIoBase, writer: AsyncIoBase, clos
     result = T(reader: reader, writer: writer, closeBehaviour: closeBehaviour)
     result.init(readLock = reader.readLock, writeLock = nil)
 
-proc new*(T: type AsyncTeeWriter, writers: varargs[AsyncIoBase]): T =
-    result = T(writers: @writers)
+proc new*(T: type AsyncTeeWriter, writers: varargs[AsyncIoBase], closeBehaviour = CloseWriter): T =
+    ## CloseReader behaviour has no effect
+    result = T(
+        writers: newSeqOfCap[AsyncIoBase](writers.len()),
+        closeBehaviour: closeBehaviour
+    )
     var allWriteLocks = newSeqOfCap[Lock](writers.len())
-    for w in writers:
-        allWriteLocks.add(w.writeLock)
+    for writer in writers:
+        if writer of AsyncTeeWriter:
+            result.writers.add AsyncTeeWriter(writer).writers
+        else:
+            result.writers.add writer
+        allWriteLocks.add(writer.writeLock)
     result.init(readLock = nil, writeLock = allWriteLocks.merge())
 
 proc new*(T: type AsyncVoid): T =
@@ -263,8 +272,9 @@ method close(self: AsyncTeeReader) =
 method close(self: AsyncTeeWriter) =
     self.cancelled.trigger()
     self.closed = true
-    for w in self.writers:
-        w.close()
+    if self.closeBehaviour in {CloseBoth, CloseWriter}:
+        for w in self.writers:
+            w.close()
 
 method close(self: AsyncVoid) =
     self.closed = true
