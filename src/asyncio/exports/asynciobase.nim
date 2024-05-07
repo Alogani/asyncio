@@ -13,7 +13,8 @@ type
 
     CloseBehaviour* = enum
         ## Flag to set the closing behaviour of some high level objects containing multiple streams
-        ## It always imply cancel and set its flag to "closed"
+        ## It always imply cancel and set its flag to "closed".
+        ## You should know what you are doing or it could cause file descriptors leaks
         #
         # Concerns asynciochilds files
         CloseBoth, CloseReader, CloseWriter, CancelOnly
@@ -114,6 +115,7 @@ proc readAvailable*(self: AsyncIoBase, count: Natural, cancelFut: Future[
     ## Await at least one byte is available. So read can be from 1 byte to `count`
     ##
     ## If cancelled is triggered during read, an empty string is returned
+    let cancelFut = any(self.cancelled, cancelFut)
     withLock self.readLock, cancelFut:
         result = await self.readAvailableUnlocked(count, cancelFut)
 
@@ -122,6 +124,7 @@ proc readChunk*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[
     ## Await at least one byte is available. Try to read a big chunk of data to optimize speed
     ##
     ## The exact size is implementation specific and can vary between objects
+    let cancelFut = any(self.cancelled, cancelFut)
     withLock self.readLock, cancelFut:
         result = await self.readChunkUnlocked(cancelFut)
 
@@ -130,11 +133,13 @@ proc readLine*(self: AsyncIoBase, keepNewLine = false, cancelFut: Future[
     ## Attempt to read up to a newline or to the end of stream
     ##
     ## newline can be kept if `keepNewLine` is set to true, which can be used to distinguish when end of stream is reached
+    let cancelFut = any(self.cancelled, cancelFut)
     withLock self.readLock, cancelFut:
         result = await self.readLineUnlocked(keepNewLine, cancelFut)
 
 proc readAll*(self: AsyncIoBase, cancelFut: Future[void] = nil): Future[
         string] {.async.} =
+    let cancelFut = any(self.cancelled, cancelFut)
     withLock self.readLock, cancelFut:
         result = await self.readAllUnlocked(cancelFut)
 
@@ -143,7 +148,8 @@ proc write*(self: AsyncIoBase, data: string, cancelFut: Future[
     ## Await write is available and write to it
     ##
     ## Number of bytes written is returned and can be inferior to `data.len()`
-    withLock self.writeLock, any(self.cancelled, cancelFut):
+    let cancelFut = any(self.cancelled, cancelFut)
+    withLock self.writeLock, cancelFut:
         result = await self.writeUnlocked(data, cancelFut)
 
 proc writeDiscard*(self: AsyncIoBase, data: string, cancelFut: Future[
