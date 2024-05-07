@@ -9,15 +9,6 @@ type
     StreamAsyncWrapper = ref object of StreamObj
         stream: AsyncIoBase
 
-
-proc asclose(s: Stream)
-proc asatEnd(s: Stream): bool
-proc asreadLine(s: Stream; line: var string): bool
-proc asreadData(s: Stream; buffer: pointer; bufLen: int): int
-proc aswriteData(s: Stream; buffer: pointer; bufLen: int)
-proc toStream*(stream: AsyncIoBase): StreamAsyncWrapper
-
-
 proc asclose(s: Stream) =
     {.gcsafe, cast(tags: []).}:
         try:
@@ -57,6 +48,9 @@ proc aswriteData(s: Stream; buffer: pointer; bufLen: int) =
 
 
 proc toStream*(stream: AsyncIoBase): StreamAsyncWrapper =
+    ## Transform an AsyncIoBase object into an object Stream object (from std/streams).
+    ## So it could be used in every library that expects a Stream object.
+    ## It uses internally waitFor, so performance souldn't be great
     StreamAsyncWrapper(stream: stream,
         closeImpl: asclose,
         atEndImpl: asatEnd,

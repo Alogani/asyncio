@@ -21,7 +21,8 @@ type
         ## In Unbound, the buffer is never filled (on read -> warning: blocking behaviour if stream is empty) or flushed (write -W non blocking behaviour).
         ## In Normal, the readBufSize and writeBufSize are normally used.
         Normal, Passthrough, Unbound
-    
+
+type
     AsyncBuffer* = ref object of AsyncIoBase
         ## An object that allow to bufferize other AsyncIoBase objects.
         ## Slower for local files
@@ -72,6 +73,7 @@ type
         ## Meaning that reading from it will both read (and return) from underlying reader, and write the data to the underlying writer
         reader: AsyncIoBase
         writer: AsyncIoBase
+        closeBehaviour: CloseBehaviour
 
     AsyncTeeWriter* = ref object of AsyncIoBase
         ## Object that allows to clone data written to it to multiple writers
@@ -139,10 +141,15 @@ proc new*(T: type AsyncBuffer, stream: AsyncIoBase, readBufSize,
     result.init(readLock = stream.readLock, writeLock = stream.writeLock)
 
 proc new*(T: type AsyncChainReader, readers: varargs[AsyncIoBase]): T =
-    result = T(readers: readers.toDeque())
+    result = T(readers: initDeque[AsyncIoBase](readers.len()))
     var allReaderLocks = newSeqOfCap[Lock](readers.len())
-    for r in readers:
-        allReaderLocks.add(r.readLock)
+    for stream in readers:
+        if stream of AsyncChainReader: # Small optimization, maybe not worth
+            for substream in AsyncChainReader(stream).readers.items():
+                 result.readers.addLast substream
+        else:
+            result.readers.addLast stream
+        allReaderLocks.add(stream.readLock)
     result.init(readLock = allReaderLocks.merge(), writeLock = nil)
 
 proc new*(T: type AsyncIoDelayed; stream: AsyncIoBase, delayMs: float): T =
@@ -159,7 +166,7 @@ proc new(T: type AsyncStreamWriter, buffer: Buffer, hasData: Event,
     result = T(buffer: buffer, hasData: hasData, writerClosed: writerClosed)
     result.init(readLock = nil, writeLock = Lock.new())
 
-proc new*(T: type AsyncStream): T =
+proc new*(T: type AsyncStream, closeBehaviour = CloseBoth): T =
     var
         buffer = Buffer.new()
         hasData = Event.new()
@@ -167,7 +174,8 @@ proc new*(T: type AsyncStream): T =
     result = T()
     result.init(
         reader = AsyncStreamReader.new(buffer, hasData, writerClosed),
-        writer = AsyncStreamWriter.new(buffer, hasData, writerClosed)
+        writer = AsyncStreamWriter.new(buffer, hasData, writerClosed),
+        closeBehaviour = closeBehaviour
     )
 
 proc new*(T: type AsyncString, data: varargs[string]): AsyncString =
@@ -178,8 +186,8 @@ proc new*(T: type AsyncString, data: varargs[string]): AsyncString =
     stream.writer.close()
     return cast[AsyncString](stream.reader)
 
-proc new*(T: type AsyncTeeReader; reader: AsyncIoBase, writer: AsyncIoBase): T =
-    result = T(reader: reader, writer: writer)
+proc new*(T: type AsyncTeeReader; reader: AsyncIoBase, writer: AsyncIoBase, closeBehaviour = CloseBoth): T =
+    result = T(reader: reader, writer: writer, closeBehaviour: closeBehaviour)
     result.init(readLock = reader.readLock, writeLock = nil)
 
 proc new*(T: type AsyncTeeWriter, writers: varargs[AsyncIoBase]): T =
@@ -247,8 +255,10 @@ method close(self: AsyncStreamWriter) =
 method close(self: AsyncTeeReader) =
     self.closed = true
     self.cancelled.trigger()
-    self.reader.close()
-    self.writer.close()
+    if self.closeBehaviour in {CloseBoth, CloseReader}:
+        self.reader.close()
+    if self.closeBehaviour in {CloseBoth, CloseWriter}:
+        self.writer.close()
 
 method close(self: AsyncTeeWriter) =
     self.cancelled.trigger()
@@ -309,7 +319,7 @@ method readAvailableUnlocked(self: AsyncStreamReader, count: int,
     if self.closed:
         return
     if not self.writerClosed[]:
-        await any(self.hasData, cancelFut, self.cancelled)
+        await any(self.hasData, cancelFut)
     result = self.buffer.read(count)
     if self.buffer.isEmpty():
         self.hasData.clear()

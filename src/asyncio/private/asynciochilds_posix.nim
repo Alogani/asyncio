@@ -62,14 +62,15 @@ proc new*(T: type AsyncFile, file: File, direction = fmReadWrite): T =
 proc new*(T: type AsyncFile, path: string, mode = fmRead): T =
     T.new(open(path, mode), mode)
 
-proc new*(T: type AsyncPipe): T =
+proc new*(T: type AsyncPipe, closeBehaviour = CloseBoth): T =
     var pipesArr: array[2, cint]
     if pipe(pipesArr) != 0:
         raiseOSError(osLastError())
     result = T()
     result.init(
         reader = AsyncFile.new(pipesArr[0], fmRead),
-        writer = AsyncFile.new(pipesArr[1], fmWrite)
+        writer = AsyncFile.new(pipesArr[1], fmWrite),
+        closeBehaviour = closeBehaviour
     )
 
 proc readSelect(self: AsyncFile): Future[void] =
@@ -109,7 +110,7 @@ method close(self: AsyncFile) =
 
 method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[
         void]): Future[string] {.async.} =
-    if await self.readSelect().wait(any(cancelFut, self.cancelled)):
+    if await self.readSelect().wait(cancelFut):
         result = newString(count)
         let bytesCount = posix.read(self.fd, addr(result[0]), count)
         if bytesCount == -1:
@@ -120,7 +121,7 @@ method readAvailableUnlocked(self: AsyncFile, count: int, cancelFut: Future[
 
 method writeUnlocked(self: AsyncFile, data: string, cancelFut: Future[
         void]): Future[int] {.async.} =
-    if await self.writeSelect().wait(any(cancelFut, self.cancelled)):
+    if await self.writeSelect().wait(cancelFut):
         let bytesCount = posix.write(self.fd, addr(data[0]), data.len())
         if bytesCount == -1:
             self.osError = errno

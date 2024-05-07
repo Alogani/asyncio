@@ -7,10 +7,12 @@ type AsyncTwoEnd* = ref object of AsyncIoBase
     ## Meaning that you can read with reader what was write to writer
     reader: AsyncIoBase
     writer: AsyncIoBase
+    closeBehaviour: CloseBehaviour
 
-proc init*(self: AsyncTwoEnd, reader, writer: AsyncIoBase) =
+proc init*(self: AsyncTwoEnd, reader, writer: AsyncIoBase, closeBehaviour: CloseBehaviour) =
     self.reader = reader
     self.writer = writer
+    self.closeBehaviour = closeBehaviour
     self.init(reader.readLock, writer.writeLock)
 
 proc reader*(self: AsyncTwoEnd): AsyncIoBase =
@@ -32,6 +34,9 @@ method writeUnlocked(self: AsyncTwoEnd, data: string, cancelFut: Future[
 
 method close*(self: AsyncTwoEnd) =
     self.closed = true
-    self.reader.close()
-    self.writer.close()
     self.cancelled.trigger()
+    if self.closeBehaviour in {CloseBoth, CloseReader}:
+        self.reader.close()
+    if self.closeBehaviour in {CloseBoth, CloseWriter}:
+        self.writer.close()
+    

@@ -11,6 +11,13 @@ type
         writeLock: Lock
         cancelled: Event
 
+    CloseBehaviour* = enum
+        ## Flag to set the closing behaviour of some high level objects containing multiple streams
+        ## It always imply cancel and set its flag to "closed"
+        #
+        # Concerns asynciochilds files
+        CloseBoth, CloseReader, CloseWriter, CancelOnly
+
 const
     ClearWaitMS = 5
     BufsizeLine = 80
